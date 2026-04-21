@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [{ "src": "**/*.html", "use": "@vercel/static" }],
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/locations", "dest": "/pages/locations.html" },
+    { "src": "/rotations", "dest": "/pages/rotations.html" },
+    { "src": "/safari", "dest": "/pages/safari.html" },
+    { "src": "/how-it-works", "dest": "/pages/how-it-works.html" },
+    { "src": "/apply", "dest": "/pages/apply.html" },
+    { "src": "/schedule", "dest": "/pages/schedule.html" },
+    { "src": "/payment", "dest": "/pages/payment.html" },
+    { "src": "/medical-travel", "dest": "/pages/medical-travel.html" },
+    { "src": "/admin", "dest": "/pages/admin.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}

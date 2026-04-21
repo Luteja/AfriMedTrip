@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — AfriMedTrip</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{savanna:'#C8860A','savanna-light':'#F5E6C8','savanna-dark':'#8B5E07',forest:'#1C4A2A','forest-mid':'#2E7D32','forest-light':'#E8F5E9',sand:'#FDF6E3',dusk:'#1A1A2E',sidebar:'#0E1F10'},fontFamily:{display:['Cormorant Garamond','serif'],body:['Outfit','sans-serif']}}}}</script>
+  <style>
+    body{font-family:'Outfit',sans-serif;overflow:hidden}
+    .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 16px;margin:2px 8px;border-radius:10px;font-size:.875rem;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s}
+    .sidebar-item:hover{background:rgba(255,255,255,.08);color:white}
+    .sidebar-item.active{background:#2E7D32;color:white;font-weight:600}
+    .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:700}
+    .badge.new{background:#DBEAFE;color:#1D4ED8}
+    .badge.review{background:#FEF9C3;color:#854D0E}
+    .badge.approved{background:#DCFCE7;color:#166534}
+    .badge.confirmed{background:#CFFAFE;color:#0E7490}
+    .badge.placement{background:#F3E8FF;color:#7E22CE}
+    .badge.completed{background:#F0FDF4;color:#166534}
+    .badge.cancelled{background:#FEE2E2;color:#991B1B}
+    th{padding:11px 16px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #F3F4F6}
+    td{padding:13px 16px;font-size:.85rem;border-bottom:1px solid #F9FAFB}
+    tr:hover td{background:#FAFAFA}
+    .form-input{width:100%;padding:10px 13px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:.88rem;outline:none;transition:border-color .2s;font-family:'Outfit',sans-serif}
+    .form-input:focus{border-color:#2E7D32}
+    .form-select{width:100%;padding:10px 13px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:.88rem;outline:none;font-family:'Outfit',sans-serif;background:white;appearance:none;cursor:pointer}
+    .stat-card{background:white;border-radius:16px;padding:20px;border:1px solid #F3F4F6;transition:all .2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .modal{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+    .modal.open{opacity:1;pointer-events:all}
+    .modal-box{background:white;border-radius:20px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    .modal.open .modal-box{transform:translateY(0)}
+    .tab{padding:8px 16px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;color:#6B7280;background:none}
+    .tab.active{background:#1C4A2A;color:white}
+    [data-panel]{display:none}
+    [data-panel].active{display:block}
+    .prog{height:6px;background:#F3F4F6;border-radius:20px;overflow:hidden}
+    .prog-bar{height:100%;border-radius:20px;transition:width .8s}
+  </style>
+</head>
+<body class="bg-gray-50 text-dusk">
+
+<!-- LOGIN -->
+<div id="loginWall" class="fixed inset-0 z-[9999] bg-sidebar flex items-center justify-center p-5">
+  <div class="bg-white rounded-2xl p-10 w-full max-w-sm shadow-2xl">
+    <div class="font-display text-2xl font-bold text-forest mb-1">AfriMedTrip<span class="text-savanna">.com</span></div>
+    <div class="text-gray-400 text-sm mb-8">Admin Portal</div>
+    <div class="mb-4"><label class="block text-xs font-semibold mb-2">Email</label><input class="form-input" type="email" id="adminEmail" value="admin@afrimedtrip.com"/></div>
+    <div class="mb-6"><label class="block text-xs font-semibold mb-2">Password</label><input class="form-input" type="password" id="adminPass" value="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"/></div>
+    <button onclick="doAdminLogin()" class="w-full bg-forest hover:bg-forest-mid text-white font-bold py-3 rounded-xl transition-all">Sign In to Dashboard</button>
+    <p class="text-center text-xs text-gray-400 mt-4">Demo: any credentials work for preview</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="adminApp" class="hidden h-screen flex overflow-hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="w-60 bg-sidebar flex flex-col h-screen shrink-0">
+    <div class="px-5 pt-6 pb-4">
+      <div class="font-display text-xl font-bold text-white">AfriMedTrip<span class="text-savanna">.com</span></div>
+      <div class="text-xs text-white/30 mt-1 mb-5">Admin Dashboard</div>
+    </div>
+    <div class="px-2 flex-1 overflow-y-auto">
+      <div class="text-white/25 text-xs font-bold tracking-widest uppercase px-4 mb-2">Main</div>
+      <div class="sidebar-item active" onclick="nav('overview',this)"><span>📊</span> Overview</div>
+      <div class="sidebar-item" onclick="nav('pipeline',this)"><span>🔄</span> Pipeline</div>
+      <div class="sidebar-item" onclick="nav('applications',this)"><span>📋</span> Applications <span class="ml-auto bg-savanna text-white text-xs px-2 py-0.5 rounded-full" id="newBadge">0</span></div>
+      <div class="sidebar-item" onclick="nav('zoom',this)"><span>📹</span> Zoom Meetings</div>
+      <div class="text-white/25 text-xs font-bold tracking-widest uppercase px-4 mt-4 mb-2">Finance</div>
+      <div class="sidebar-item" onclick="nav('payments',this)"><span>💳</span> Payments</div>
+      <div class="text-white/25 text-xs font-bold tracking-widest uppercase px-4 mt-4 mb-2">Comms</div>
+      <div class="sidebar-item" onclick="nav('emails',this)"><span>✉️</span> Email Center</div>
+      <div class="text-white/25 text-xs font-bold tracking-widest uppercase px-4 mt-4 mb-2">System</div>
+      <div class="sidebar-item" onclick="nav('settings',this)"><span>⚙️</span> Settings</div>
+    </div>
+    <div class="px-5 py-4 border-t border-white/10 flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-forest-mid flex items-center justify-center text-white text-xs font-bold">A</div>
+      <div><div class="text-white text-sm font-semibold">Admin</div><div class="text-white/30 text-xs">Administrator</div></div>
+      <button onclick="logout()" class="ml-auto text-white/25 hover:text-white/60 text-xs">Exit</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Topbar -->
+    <div class="bg-white border-b border-gray-100 px-7 h-14 flex items-center justify-between shrink-0 shadow-sm">
+      <div class="font-bold text-base" id="pageTitle">Overview</div>
+      <div class="flex items-center gap-3">
+        <input oninput="searchApps(this.value)" placeholder="Search applications…" class="border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none focus:border-forest w-56 transition-colors"/>
+        <button onclick="refreshData()" class="bg-forest text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-forest-mid transition-all">↻ Refresh</button>
+        <button onclick="openModal('emailModal')" class="bg-savanna text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-savanna-dark transition-all">+ Email</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 overflow-y-auto p-7">
+
+      <!-- OVERVIEW -->
+      <div data-panel="overview" class="active">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="statsGrid"></div>
+        <div class="grid lg:grid-cols-2 gap-5 mb-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between"><span class="font-bold text-sm">Applications by Status</span></div>
+            <div class="p-6" id="statusChart"></div>
+          </div>
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between"><span class="font-bold text-sm">By Destination</span></div>
+            <div class="p-6" id="cityChart"></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between"><span class="font-bold text-sm">Recent Applications</span><button onclick="nav('applications',document.querySelector('[onclick*=applications]'))" class="text-xs text-forest font-semibold">View All →</button></div>
+          <div class="overflow-x-auto"><table class="w-full" id="recentTable"></table></div>
+        </div>
+      </div>
+
+      <!-- PIPELINE -->
+      <div data-panel="pipeline">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="pipelineGrid"></div>
+      </div>
+
+      <!-- APPLICATIONS -->
+      <div data-panel="applications">
+        <div class="flex gap-2 mb-4 flex-wrap" id="filterBtns"></div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto"><table class="w-full"><thead id="appsThead"></thead><tbody id="appsBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ZOOM -->
+      <div data-panel="zoom">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-50 font-bold text-sm">Zoom Meeting Requests</div>
+          <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Name</th><th>Email</th><th>Date</th><th>Time</th><th>Timezone</th><th>Interests</th><th>Status</th><th>Actions</th></tr></thead><tbody id="zoomBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- PAYMENTS -->
+      <div data-panel="payments">
+        <div class="grid grid-cols-3 gap-4 mb-6" id="paymentStats"></div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between"><span class="font-bold text-sm">Payment Records</span><button onclick="alert('Opens Stripe Dashboard')" class="text-xs text-savanna font-semibold">Open Stripe →</button></div>
+          <div class="overflow-x-auto"><table class="w-full"><thead><tr><th>Applicant</th><th>Amount</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="paymentsBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- EMAILS -->
+      <div data-panel="emails">
+        <div class="grid lg:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 font-bold text-sm">Email Templates</div>
+            <div class="p-5 space-y-3" id="emailTemplateList"></div>
+          </div>
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 font-bold text-sm">Sent Emails Log</div>
+            <div class="p-5 space-y-3" id="emailLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div data-panel="settings">
+        <div class="grid lg:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 font-bold text-sm">Organisation Settings</div>
+            <div class="p-6 space-y-4">
+              <div><label class="block text-xs font-semibold mb-2">Organisation Name</label><input class="form-input" value="AfriMedTrip.com"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Admin Email</label><input class="form-input" value="info@afrimedtrip.com"/></div>
+              <div><label class="block text-xs font-semibold mb-2">WhatsApp Number</label><input class="form-input" value="+255 700 000 000"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Deposit Amount (USD)</label><input class="form-input" type="number" value="200"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Stripe Publishable Key</label><input class="form-input" value="pk_test_…"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Frontend URL</label><input class="form-input" value="https://afrimedtrip.com"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Resend API Key</label><input class="form-input" type="password" value="re_…"/></div>
+              <div><label class="block text-xs font-semibold mb-2">Supabase URL</label><input class="form-input" value="https://xxxx.supabase.co"/></div>
+              <button onclick="showToast('Settings saved!')" class="bg-forest text-white font-bold px-6 py-2.5 rounded-xl text-sm">Save Settings</button>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between font-bold text-sm">Team Members <button class="text-xs text-forest font-semibold">+ Add</button></div>
+            <div class="p-5 space-y-3" id="teamList"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- APP DETAIL MODAL -->
+<div class="modal" id="appModal" onclick="if(event.target===this)closeModal('appModal')">
+  <div class="modal-box">
+    <div class="flex items-start justify-between p-6 border-b border-gray-100">
+      <h3 class="font-bold text-lg" id="appModalTitle">Application Detail</h3>
+      <button onclick="closeModal('appModal')" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-sm transition-colors">✕</button>
+    </div>
+    <div class="p-6" id="appModalBody"></div>
+  </div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal" id="emailModal" onclick="if(event.target===this)closeModal('emailModal')">
+  <div class="modal-box">
+    <div class="flex items-start justify-between p-6 border-b border-gray-100">
+      <h3 class="font-bold text-lg">Compose Email</h3>
+      <button onclick="closeModal('emailModal')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm">✕</button>
+    </div>
+    <div class="p-6">
+      <div class="flex flex-wrap gap-2 mb-4" id="tplBtns"></div>
+      <div class="space-y-3">
+        <div><label class="block text-xs font-semibold mb-1">To</label><input class="form-input" id="eTo" placeholder="client@email.com"/></div>
+        <div><label class="block text-xs font-semibold mb-1">Subject</label><input class="form-input" id="eSubject"/></div>
+        <div><label class="block text-xs font-semibold mb-1">Message</label><textarea class="form-input" id="eBody" rows="7"></textarea></div>
+        <button onclick="sendEmail()" class="w-full bg-forest text-white font-bold py-3 rounded-xl hover:bg-forest-mid transition-all">📤 Send Email</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   DATA & STATE
+══════════════════════════════════════ */
+const API = 'http://localhost:8000/api';
+const ADMIN_TOKEN = 'afrimedtrip-admin-2026';
+const H = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ADMIN_TOKEN}` };
+
+// Seed mock data
+let APPS = [
+  {id:1,first_name:'Anna',last_name:'Kowalski',email:'anna.k@email.de',nationality:'Germany',city:'Arusha',specialty:'Pediatrics',weeks:'6 Weeks',start_date:'2026-06-01',status:'confirmed',deposit_paid:true,created_at:'2026-04-01',coordinator_notes:'',safari_options:['serengeti_day']},
+  {id:2,first_name:'David',last_name:'Mitchell',email:'d.mitchell@nhs.uk',nationality:'UK',city:'Dar es Salaam',specialty:'Surgery',weeks:'4 Weeks',start_date:'2026-07-15',status:'approved',deposit_paid:false,created_at:'2026-04-05',coordinator_notes:'Interested in safari',safari_options:[]},
+  {id:3,first_name:'Sofía',last_name:'García',email:'sofia.g@ucm.es',nationality:'Spain',city:'Zanzibar',specialty:'Internal Medicine',weeks:'8 Weeks',start_date:'2026-05-20',status:'placement',deposit_paid:true,created_at:'2026-03-12',coordinator_notes:'',safari_options:['zanzibar']},
+  {id:4,first_name:'Lukas',last_name:'Weber',email:'l.weber@charite.de',nationality:'Germany',city:'Arusha',specialty:'Emergency Medicine',weeks:'3 Weeks',start_date:'2026-08-01',status:'review',deposit_paid:false,created_at:'2026-04-10',coordinator_notes:'',safari_options:[]},
+  {id:5,first_name:'Amara',last_name:'Diallo',email:'amara.d@gmail.com',nationality:'France',city:'Zanzibar',specialty:'Public Health',weeks:'12 Weeks',start_date:'2026-09-01',status:'new',deposit_paid:false,created_at:'2026-04-15',coordinator_notes:'Group of 3',safari_options:[]},
+  {id:6,first_name:'James',last_name:'Oduya',email:'j.oduya@uon.ac.ke',nationality:'Kenya',city:'Dar es Salaam',specialty:'Infectious Diseases',weeks:'6 Weeks',start_date:'2026-02-01',status:'completed',deposit_paid:true,created_at:'2026-01-15',coordinator_notes:'Excellent',safari_options:['serengeti_overnight']},
+];
+
+let ZOOM = [
+  {id:1,first_name:'Emma',last_name:'Sanders',email:'emma.s@gmail.com',preferred_date:'2026-04-22',preferred_time:'10:00–11:00',timezone:'United Kingdom (GMT)',interests:['rotations','safari'],status:'pending'},
+  {id:2,first_name:'Raj',last_name:'Patel',email:'raj.p@meduni.at',preferred_date:'2026-04-24',preferred_time:'14:00–15:00',timezone:'Germany (CET)',interests:['combined'],status:'confirmed'},
+];
+
+let PAYMENTS = [
+  {id:1,applicant:'Anna Kowalski',email:'anna.k@email.de',amount:200,type:'Deposit',date:'2026-04-03',status:'paid',app_id:1},
+  {id:2,applicant:'Sofía García',email:'sofia.g@ucm.es',amount:200,type:'Deposit',date:'2026-03-15',status:'paid',app_id:3},
+  {id:3,applicant:'James Oduya',email:'j.oduya@uon.ac.ke',amount:200,type:'Deposit',date:'2026-01-20',status:'paid',app_id:6},
+  {id:4,applicant:'David Mitchell',email:'d.mitchell@nhs.uk',amount:200,type:'Deposit',date:'—',status:'pending',app_id:2},
+];
+
+const TEMPLATES = {
+  welcome:{subject:'Welcome to AfriMedTrip — Application Received',body:`Dear [Name],\n\nThank you for applying to AfriMedTrip! We've received your application and will be in touch within 24–48 hours.\n\nWarm regards,\nThe AfriMedTrip Team`},
+  approved:{subject:'🎉 Your Application is Approved!',body:`Dear [Name],\n\nGreat news! Your application has been approved.\n\nPlease pay the $200 deposit via the link below to secure your placement:\n[PAYMENT LINK]\n\nAfriMedTrip Team`},
+  deposit:{subject:'Action Required: $200 Deposit to Confirm Your Placement',body:`Dear [Name],\n\nYour placement is confirmed pending your $200 deposit. Please pay within 5 business days:\n[STRIPE LINK]\n\nAfriMedTrip Team`},
+  predeparture:{subject:'Pre-Departure Information — Tanzania',body:`Dear [Name],\n\nYour placement starts soon! Please complete your pre-departure checklist:\n✅ Upload all documents to your dashboard\n✅ Yellow fever vaccination\n✅ Travel insurance\n✅ Send flight details\n\nAfriMedTrip Team`},
+  certificate:{subject:'🏆 Certificate of Completion — AfriMedTrip',body:`Dear [Name],\n\nCongratulations on completing your placement!\nPlease find your Certificate of Completion attached.\n\nWe'd love your feedback: [FEEDBACK LINK]\n\nAfriMedTrip Team`},
+};
+
+const TEAM = [
+  {name:'Admin User',email:'admin@afrimedtrip.com',role:'Administrator',color:'#1C4A2A'},
+  {name:'Sarah Mitchell',email:'sarah@afrimedtrip.com',role:'Coordinator',color:'#1565C0'},
+  {name:'James Osei',email:'james@afrimedtrip.com',role:'Coordinator',color:'#FF9800'},
+  {name:'Sales Team',email:'sales@afrimedtrip.com',role:'Sales',color:'#00695C'},
+];
+
+/* ══════════════════════════════════════
+   AUTH
+══════════════════════════════════════ */
+function doAdminLogin() {
+  document.getElementById('loginWall').style.opacity='0';
+  document.getElementById('loginWall').style.transition='opacity .4s';
+  setTimeout(()=>{ document.getElementById('loginWall').style.display='none'; document.getElementById('adminApp').classList.remove('hidden'); document.getElementById('adminApp').style.display='flex'; buildAll(); },400);
+}
+function logout() { location.reload(); }
+
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function nav(panelId, el) {
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('[data-panel]').forEach(p=>p.classList.remove('active'));
+  const p = document.querySelector(`[data-panel="${panelId}"]`);
+  if(p) p.classList.add('active');
+  const titles = {overview:'Overview',pipeline:'Application Pipeline',applications:'All Applications',zoom:'Zoom Meetings',payments:'Payments',emails:'Email Center',settings:'Settings'};
+  document.getElementById('pageTitle').textContent = titles[panelId]||panelId;
+  if(panelId==='pipeline') buildPipeline();
+  if(panelId==='applications') buildAppsTable(APPS);
+  if(panelId==='zoom') buildZoom();
+  if(panelId==='payments') buildPayments();
+  if(panelId==='emails') buildEmails();
+  if(panelId==='settings') buildSettings();
+}
+
+/* ══════════════════════════════════════
+   BUILD ALL
+══════════════════════════════════════ */
+function buildAll() {
+  buildStats();
+  buildStatusChart();
+  buildCityChart();
+  buildRecentTable();
+  buildAppsFilters();
+  buildAppsTable(APPS);
+  buildEmailTemplates();
+  document.getElementById('newBadge').textContent = APPS.filter(a=>a.status==='new').length;
+}
+
+/* ── STATS ── */
+function buildStats() {
+  const total=APPS.length, confirmed=APPS.filter(a=>['confirmed','placement','completed'].includes(a.status)).length;
+  const pending=APPS.filter(a=>['new','review'].includes(a.status)).length;
+  const revenue=PAYMENTS.filter(p=>p.status==='paid').reduce((s,p)=>s+p.amount,0);
+  const cards=[
+    {icon:'📋',label:'Total Applications',val:total,trend:'+12%',up:true,bg:'#EFF6FF',ic:'#1D4ED8'},
+    {icon:'✅',label:'Confirmed/Active',val:confirmed,trend:'+8%',up:true,bg:'#F0FDF4',ic:'#166534'},
+    {icon:'⏳',label:'Awaiting Review',val:pending,trend:'',up:false,bg:'#FFFBEB',ic:'#854D0E'},
+    {icon:'💰',label:'Revenue Collected',val:`$${revenue.toLocaleString()}`,trend:'+22%',up:true,bg:'#F0F9FF',ic:'#075985'},
+  ];
+  document.getElementById('statsGrid').innerHTML = cards.map(c=>`
+    <div class="stat-card">
+      <div class="flex items-start justify-between mb-3">
+        <div style="width:40px;height:40px;border-radius:10px;background:${c.bg};display:flex;align-items:center;justify-content:center;font-size:1.1rem">${c.icon}</div>
+        ${c.trend?`<span style="background:${c.up?'#DCFCE7':'#FEE2E2'};color:${c.up?'#166534':'#991B1B'};font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:20px">${c.trend}</span>`:''}
+      </div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:900;line-height:1;margin-bottom:4px">${c.val}</div>
+      <div style="font-size:.78rem;color:#6B7280">${c.label}</div>
+    </div>`).join('');
+}
+
+/* ── STATUS CHART ── */
+function buildStatusChart() {
+  const statuses=['new','review','approved','confirmed','placement','completed'];
+  const colors={new:'#1D4ED8',review:'#854D0E',approved:'#166534',confirmed:'#0E7490',placement:'#7E22CE',completed:'#166534'};
+  document.getElementById('statusChart').innerHTML = statuses.map(s=>{
+    const c=APPS.filter(a=>a.status===s).length, pct=Math.round(c/APPS.length*100);
+    return `<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px"><span style="text-transform:capitalize;font-weight:600">${s}</span><span style="color:#9CA3AF">${c} (${pct}%)</span></div>
+      <div class="prog"><div class="prog-bar" style="width:${pct}%;background:${colors[s]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ── CITY CHART ── */
+function buildCityChart() {
+  const cities=['Arusha','Dar es Salaam','Zanzibar'];
+  const colors={'Arusha':'#1C4A2A','Dar es Salaam':'#C8860A','Zanzibar':'#0E7490'};
+  document.getElementById('cityChart').innerHTML = cities.map(c=>{
+    const count=APPS.filter(a=>a.city===c).length, pct=Math.round(count/APPS.length*100);
+    return `<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:5px"><span style="font-weight:600">${c}</span><span style="color:#9CA3AF">${count}</span></div>
+      <div class="prog"><div class="prog-bar" style="width:${pct}%;background:${colors[c]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ── RECENT TABLE ── */
+function buildRecentTable() {
+  document.getElementById('recentTable').innerHTML = `
+    <thead><tr><th>Applicant</th><th>City</th><th>Specialty</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${APPS.slice(0,4).map(appRow).join('')}</tbody>`;
+}
+
+/* ── PIPELINE ── */
+function buildPipeline() {
+  const cols=[{k:'new',l:'New',c:'#1D4ED8'},{k:'review',l:'Under Review',c:'#854D0E'},{k:'approved',l:'Approved',c:'#166534'},{k:'confirmed',l:'Confirmed',c:'#0E7490'}];
+  document.getElementById('pipelineGrid').innerHTML = cols.map(col=>{
+    const apps=APPS.filter(a=>a.status===col.k);
+    return `<div style="background:#F9FAFB;border-radius:14px;padding:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6B7280">${col.l}</span>
+        <span style="width:20px;height:20px;border-radius:50%;background:${col.c};color:white;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center">${apps.length}</span>
+      </div>
+      ${apps.map(a=>`<div onclick="openAppDetail(${a.id})" style="background:white;border-radius:10px;padding:11px;margin-bottom:8px;border:1px solid #F3F4F6;cursor:pointer;transition:all .2s" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.08)'" onmouseleave="this.style.boxShadow=''">
+        <div style="font-weight:600;font-size:.85rem">${a.first_name} ${a.last_name}</div>
+        <div style="font-size:.75rem;color:#9CA3AF">📍 ${a.city}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:7px">
+          <span style="font-size:.7rem;background:#E8F5E9;color:#1C4A2A;padding:2px 8px;border-radius:8px;font-weight:600">${a.weeks}</span>
+          <span style="font-size:.7rem;color:#9CA3AF">${a.start_date}</span>
+        </div>
+      </div>`).join('')||'<div style="text-align:center;padding:16px;font-size:.8rem;color:#D1D5DB">No applications</div>'}
+    </div>`;
+  }).join('');
+}
+
+/* ── APPS TABLE ── */
+function buildAppsFilters() {
+  const statuses=['all','new','review','approved','confirmed','placement','completed'];
+  document.getElementById('filterBtns').innerHTML = statuses.map(s=>`
+    <button onclick="filterApps('${s}')" class="tab ${s==='all'?'active':''}" id="filter-${s}">
+      ${s==='all'?'All ('+APPS.length+')':s.charAt(0).toUpperCase()+s.slice(1)+' ('+APPS.filter(a=>a.status===s).length+')'}
+    </button>`).join('');
+}
+
+function filterApps(status) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('filter-'+status)?.classList.add('active');
+  buildAppsTable(status==='all'?APPS:APPS.filter(a=>a.status===status));
+}
+
+function buildAppsTable(data) {
+  document.getElementById('appsThead').innerHTML = `<tr><th>ID</th><th>Applicant</th><th>City</th><th>Weeks</th><th>Specialty</th><th>Start</th><th>Deposit</th><th>Status</th><th>Actions</th></tr>`;
+  document.getElementById('appsBody').innerHTML = data.map(a=>`
+    <tr>
+      <td style="color:#9CA3AF;font-size:.75rem">#${a.id}</td>
+      <td><div style="font-weight:600">${a.first_name} ${a.last_name}</div><div style="font-size:.75rem;color:#9CA3AF">${a.email}</div></td>
+      <td>📍 ${a.city}</td>
+      <td>${a.weeks}</td>
+      <td>${a.specialty}</td>
+      <td style="font-size:.82rem">${a.start_date}</td>
+      <td>${a.deposit_paid?'<span style="color:#166534;font-weight:700;font-size:.78rem">✓ Paid</span>':'<span style="color:#C8860A;font-weight:700;font-size:.78rem">⏳ Pending</span>'}</td>
+      <td><span class="badge ${a.status}">${a.status}</span></td>
+      <td style="white-space:nowrap">
+        <button onclick="openAppDetail(${a.id})" style="background:#EFF6FF;color:#1D4ED8;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;margin-right:4px">View</button>
+        ${a.status==='review'?`<button onclick="approveApp(${a.id})" style="background:#DCFCE7;color:#166534;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;margin-right:4px">Approve</button>`:''}
+        <button onclick="openEmailForApp(${a.id})" style="background:#FEF9C3;color:#854D0E;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer">Email</button>
+      </td>
+    </tr>`).join('');
+}
+
+function appRow(a) { // For recent table (shorter)
+  return `<tr>
+    <td><div style="font-weight:600;font-size:.85rem">${a.first_name} ${a.last_name}</div><div style="font-size:.75rem;color:#9CA3AF">${a.email}</div></td>
+    <td style="font-size:.85rem">📍 ${a.city}</td>
+    <td style="font-size:.85rem">${a.specialty}</td>
+    <td><span class="badge ${a.status}">${a.status}</span></td>
+    <td><button onclick="openAppDetail(${a.id})" style="background:#EFF6FF;color:#1D4ED8;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer">View</button></td>
+  </tr>`;
+}
+
+/* ── APP DETAIL MODAL ── */
+function openAppDetail(id) {
+  const a = APPS.find(x=>x.id===id);
+  if(!a) return;
+  document.getElementById('appModalTitle').textContent = `${a.first_name} ${a.last_name} — #${a.id}`;
+  const statuses=['new','review','approved','confirmed','placement','completed','cancelled'];
+  document.getElementById('appModalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      ${[['Email',a.email],['Nationality',a.nationality],['City',a.city],['Specialty',a.specialty],['Duration',a.weeks],['Start Date',a.start_date]].map(([l,v])=>`
+        <div style="background:#F9FAFB;padding:10px 13px;border-radius:10px"><div style="font-size:.7rem;color:#9CA3AF;margin-bottom:2px">${l}</div><div style="font-size:.85rem;font-weight:600">${v}</div></div>`).join('')}
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:.78rem;font-weight:700;margin-bottom:8px">Update Status</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${statuses.map(s=>`<button onclick="updateAppStatus(${a.id},'${s}',this)" style="padding:5px 12px;border-radius:16px;border:1.5px solid ${a.status===s?'#1C4A2A':'#E5E7EB'};background:${a.status===s?'#E8F5E9':'white'};color:${a.status===s?'#1C4A2A':'#6B7280'};font-size:.75rem;font-weight:600;cursor:pointer">${s}</button>`).join('')}
+      </div>
+    </div>
+    ${!a.deposit_paid?`<div style="margin-bottom:14px"><button onclick="sendDepositLink(${a.id})" style="width:100%;background:#FEF9C3;color:#854D0E;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.85rem">💳 Send Deposit Link to ${a.email}</button></div>`:''}
+    <div style="display:flex;gap:8px">
+      <button onclick="openEmailForApp(${a.id})" style="flex:1;background:#E8F5E9;color:#1C4A2A;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.85rem">✉️ Send Email</button>
+      <button onclick="closeModal('appModal')" style="padding:11px 16px;background:#F9FAFB;border:none;border-radius:10px;cursor:pointer;font-size:.85rem;color:#6B7280">Close</button>
+    </div>`;
+  openModal('appModal');
+}
+
+function updateAppStatus(id, status, btn) {
+  const a = APPS.find(x=>x.id===id);
+  if(!a) return;
+  a.status = status;
+  btn.closest('.modal-box').querySelectorAll('button[onclick^="updateAppStatus"]').forEach(b=>{
+    b.style.borderColor='#E5E7EB'; b.style.background='white'; b.style.color='#6B7280';
+  });
+  btn.style.borderColor='#1C4A2A'; btn.style.background='#E8F5E9'; btn.style.color='#1C4A2A';
+  showToast(`Status updated to "${status}"`);
+  buildStats(); buildStatusChart(); document.getElementById('newBadge').textContent = APPS.filter(a=>a.status==='new').length;
+  // TODO: API call
+  // fetch(`${API}/applications/${id}/status`, {method:'PATCH',headers:H,body:JSON.stringify({status})});
+}
+
+function approveApp(id) {
+  updateAppStatus(id,'approved',{style:{},closest:()=>({querySelectorAll:()=>[]})});
+  buildAppsTable(APPS); showToast(`Application #${id} approved!`);
+}
+
+function sendDepositLink(id) {
+  showToast(`Deposit link sent to applicant!`);
+  closeModal('appModal');
+  // TODO: fetch(`${API}/payments/send-deposit-link/${id}`,{method:'POST',headers:H})
+}
+
+/* ── ZOOM ── */
+function buildZoom() {
+  document.getElementById('zoomBody').innerHTML = ZOOM.map(z=>`
+    <tr>
+      <td style="font-weight:600">${z.first_name} ${z.last_name}</td>
+      <td style="font-size:.82rem;color:#6B7280">${z.email}</td>
+      <td style="font-size:.82rem">${z.preferred_date}</td>
+      <td style="font-size:.82rem">${z.preferred_time}</td>
+      <td style="font-size:.78rem;color:#6B7280">${z.timezone}</td>
+      <td style="font-size:.75rem">${(z.interests||[]).join(', ')}</td>
+      <td><span class="badge ${z.status==='confirmed'?'confirmed':'review'}">${z.status}</span></td>
+      <td><button onclick="confirmZoom(${z.id})" style="background:#E8F5E9;color:#1C4A2A;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer">Send Zoom Link</button></td>
+    </tr>`).join('');
+}
+
+function confirmZoom(id) {
+  const z = ZOOM.find(x=>x.id===id); if(z) z.status='confirmed';
+  buildZoom(); showToast('Zoom link sent!');
+}
+
+/* ── PAYMENTS ── */
+function buildPayments() {
+  const paid=PAYMENTS.filter(p=>p.status==='paid').reduce((s,p)=>s+p.amount,0);
+  const pending=PAYMENTS.filter(p=>p.status==='pending').length;
+  document.getElementById('paymentStats').innerHTML = [
+    {icon:'💰',label:'Total Collected',val:`$${paid.toLocaleString()}`},
+    {icon:'⏳',label:'Pending Deposits',val:pending},
+    {icon:'📊',label:'Standard Deposit',val:'$200 USD'},
+  ].map(c=>`<div class="stat-card text-center"><div style="font-size:1.8rem;margin-bottom:6px">${c.icon}</div><div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:900;color:#1C4A2A">${c.val}</div><div style="font-size:.78rem;color:#6B7280;margin-top:2px">${c.label}</div></div>`).join('');
+  document.getElementById('paymentsBody').innerHTML = PAYMENTS.map(p=>`
+    <tr>
+      <td style="font-weight:600">${p.applicant}</td>
+      <td style="font-weight:700;color:#C8860A">$${p.amount}</td>
+      <td style="font-size:.82rem">${p.type}</td>
+      <td style="font-size:.82rem;color:#6B7280">${p.date}</td>
+      <td><span style="font-size:.78rem;font-weight:700;color:${p.status==='paid'?'#166534':'#C8860A'}">${p.status==='paid'?'✓ Paid':'⏳ Pending'}</span></td>
+      <td>${p.status==='pending'?`<button onclick="sendDepositLink(${p.app_id})" style="background:#FEF9C3;color:#854D0E;border:none;padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer">Send Link</button>`:'—'}</td>
+    </tr>`).join('');
+}
+
+/* ── EMAILS ── */
+function buildEmailTemplates() {
+  document.getElementById('tplBtns').innerHTML = Object.keys(TEMPLATES).map(k=>`
+    <button onclick="loadTpl('${k}',this)" class="tab">${k.charAt(0).toUpperCase()+k.slice(1)}</button>`).join('');
+  loadTpl('welcome', document.querySelector('#tplBtns button'));
+}
+
+function buildEmails() {
+  document.getElementById('emailTemplateList').innerHTML = Object.keys(TEMPLATES).map(k=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F9FAFB">
+      <div><div style="font-weight:600;font-size:.85rem;text-transform:capitalize">${k} Email</div><div style="font-size:.75rem;color:#9CA3AF">${TEMPLATES[k].subject}</div></div>
+      <button onclick="openEmailWithTpl('${k}')" style="background:#E8F5E9;color:#1C4A2A;border:none;padding:5px 12px;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer">Use</button>
+    </div>`).join('');
+  document.getElementById('emailLog').innerHTML = [
+    {to:'anna.k@email.de',subj:'Application Approved!',time:'2 hrs ago',s:'opened'},
+    {to:'sofia.g@ucm.es',subj:'Pre-Departure Info',time:'1 day ago',s:'opened'},
+    {to:'j.oduya@uon.ac.ke',subj:'Certificate of Completion',time:'2 days ago',s:'opened'},
+    {to:'d.mitchell@nhs.uk',subj:'Deposit Reminder',time:'3 days ago',s:'sent'},
+  ].map(e=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F9FAFB">
+      <div style="width:32px;height:32px;border-radius:50%;background:#E8F5E9;display:flex;align-items:center;justify-content:center;font-size:.9rem">✉️</div>
+      <div style="flex:1"><div style="font-size:.82rem;font-weight:600">${e.subj}</div><div style="font-size:.72rem;color:#9CA3AF">${e.to}</div></div>
+      <div style="text-align:right"><div style="font-size:.7rem;color:#9CA3AF">${e.time}</div><span style="font-size:.7rem;font-weight:700;color:${e.s==='opened'?'#166534':'#9CA3AF'}">${e.s}</span></div>
+    </div>`).join('');
+}
+
+function buildSettings() {
+  document.getElementById('teamList').innerHTML = TEAM.map(m=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F9FAFB">
+      <div style="width:36px;height:36px;border-radius:50%;background:${m.color};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0">${m.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div style="flex:1"><div style="font-weight:600;font-size:.85rem">${m.name}</div><div style="font-size:.75rem;color:#9CA3AF">${m.email}</div></div>
+      <span class="badge approved">${m.role}</span>
+    </div>`).join('');
+}
+
+/* ── EMAIL MODAL ── */
+function openEmailForApp(id) {
+  const a = APPS.find(x=>x.id===id); if(!a) return;
+  document.getElementById('eTo').value = a.email;
+  loadTpl('welcome', null);
+  openModal('emailModal');
+}
+function openEmailWithTpl(tpl) { loadTpl(tpl,null); openModal('emailModal'); }
+function loadTpl(key, btn) {
+  document.querySelectorAll('#tplBtns .tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const t=TEMPLATES[key]; if(!t) return;
+  document.getElementById('eSubject').value=t.subject;
+  document.getElementById('eBody').value=t.body;
+}
+function sendEmail() {
+  const to=document.getElementById('eTo').value;
+  if(!to){showToast('Please enter a recipient email','error');return;}
+  showToast(`Email sent to ${to}!`);
+  closeModal('emailModal');
+  // TODO: fetch(`${API}/…`,{method:'POST',headers:H,body:JSON.stringify({…})})
+}
+
+/* ── SEARCH ── */
+function searchApps(q) {
+  if(!q){buildAppsTable(APPS);return;}
+  const r=APPS.filter(a=>`${a.first_name} ${a.last_name} ${a.email} ${a.city} ${a.specialty}`.toLowerCase().includes(q.toLowerCase()));
+  buildAppsTable(r);
+  nav('applications',document.querySelector('[onclick*=applications]'));
+}
+
+/* ── UTILS ── */
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function showToast(msg,type='success'){
+  const t=document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;padding:12px 24px;border-radius:12px;font-size:.875rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.15);background:${type==='error'?'#C62828':'#1C4A2A'};color:white;transition:opacity .4s`;
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),400)},2800);
+}
+function refreshData(){showToast('Data refreshed!');buildAll();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['appModal','emailModal'].forEach(closeModal)});
+</script>
+</body>
+</html>

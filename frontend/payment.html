@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><title>Secure Deposit — AfriMedTrip</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>tailwind.config={theme:{extend:{colors:{savanna:'#C8860A','savanna-light':'#F5E6C8','savanna-dark':'#8B5E07',forest:'#1C4A2A','forest-mid':'#2E7D32','forest-light':'#E8F5E9',sand:'#FDF6E3',dusk:'#1A1A2E'},fontFamily:{display:['Cormorant Garamond','serif'],body:['Outfit','sans-serif']}}}}</script>
+<link rel="stylesheet" href="../css/main.css"/>
+<style>#card-element{padding:14px 16px;border:1.5px solid #E0E0E0;border-radius:10px;background:white}#card-element.focused{border-color:#2E7D32;box-shadow:0 0 0 3px rgba(46,125,50,0.1)}</style>
+</head>
+<body class="font-body bg-sand">
+<div class="bg-amber-50 border-b border-amber-200 py-3 text-center text-amber-800 text-sm font-medium">🔒 This secure page was sent to you after your application was approved.</div>
+<nav class="bg-white border-b px-6 py-4 flex items-center justify-between"><div class="font-display font-bold text-xl text-forest">AfriMedTrip<span class="text-savanna">.com</span></div><div class="text-dusk/50 text-xs flex items-center gap-1">🔒 Secured by Stripe</div></nav>
+<div class="max-w-5xl mx-auto px-6 py-12 grid lg:grid-cols-5 gap-12">
+  <div class="lg:col-span-2"><div class="bg-forest rounded-3xl p-8 text-white sticky top-8"><div class="text-4xl mb-4">🌍</div><div class="text-white/60 text-xs uppercase tracking-widest mb-2">Placement Deposit</div><h2 class="font-display text-4xl font-bold mb-1">$200.00</h2><p class="text-white/60 text-sm mb-8">USD — Securing your placement</p><div class="space-y-3 text-sm mb-6"><div class="flex justify-between py-2 border-b border-white/10"><span class="text-white/70">Applicant</span><span id="sName" class="font-semibold">Anna Kowalski</span></div><div class="flex justify-between py-2 border-b border-white/10"><span class="text-white/70">Destination</span><span id="sCity" class="font-semibold">Arusha</span></div><div class="flex justify-between py-2 border-b border-white/10"><span class="text-white/70">Duration</span><span id="sWeeks" class="font-semibold">6 Weeks</span></div><div class="flex justify-between py-2"><span class="text-white/70">Application</span><span id="sId" class="font-semibold text-savanna">MT-001</span></div></div><div class="bg-white/10 rounded-xl p-3 text-xs text-white/60">Deposit deducted from total package. Remaining balance due 4 weeks before departure.</div></div></div>
+  <div class="lg:col-span-3">
+    <div id="pForm" class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-forest-light border-b border-forest/10 px-8 py-5"><h2 class="font-display text-2xl font-bold text-forest">Secure Payment</h2><p class="text-dusk/55 text-sm mt-1">$200 deposit — card details encrypted via Stripe</p></div>
+      <div class="p-8">
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div><label class="form-label">First Name</label><input class="form-input bg-gray-50" id="pFirst" readonly value="Anna"/></div>
+          <div><label class="form-label">Last Name</label><input class="form-input bg-gray-50" id="pLast" readonly value="Kowalski"/></div>
+          <div class="col-span-2"><label class="form-label">Email</label><input class="form-input bg-gray-50" id="pEmail" readonly value="anna.k@email.de"/></div>
+        </div>
+        <div class="mb-5"><label class="form-label">Card Details</label><div id="card-element"></div><div id="card-errors" class="text-red-600 text-xs mt-2"></div></div>
+        <div class="mb-6"><label class="form-label">Name on Card</label><input class="form-input" id="cardName" value="Anna Kowalski"/></div>
+        <div class="flex gap-3 bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-sm text-forest"><span>🔒</span><span>Your payment is protected by 256-bit SSL encryption via Stripe.</span></div>
+        <button id="payBtn" onclick="processPayment()" class="w-full bg-forest hover:bg-forest-mid text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2">🔒 Pay $200.00 Deposit Securely</button>
+      </div>
+    </div>
+    <div id="pSuccess" class="hidden bg-white rounded-3xl shadow-sm border border-gray-100 text-center py-16 px-8">
+      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">✅</div>
+      <h2 class="font-display text-4xl font-bold text-forest mb-3">Payment Confirmed!</h2>
+      <p class="text-dusk/65 text-lg mb-8">Your $200 deposit has been received. Your Tanzania placement is officially confirmed!</p>
+      <div class="bg-forest-light rounded-2xl p-6 max-w-sm mx-auto text-left text-sm mb-6"><div class="font-semibold text-forest mb-3">What happens next?</div><div class="space-y-2 text-dusk/70"><div>✓ Confirmation email sent to inbox</div><div>✓ Coordinator contacts you within 24hrs</div><div>✓ Document upload link provided</div><div>✓ Pre-departure pack sent 2 weeks before</div></div></div>
+      <div class="text-dusk/40 text-sm" id="payRef"></div>
+    </div>
+  </div>
+</div>
+<script>
+const params=new URLSearchParams(window.location.search);
+const appId=params.get('app_id')||'MT-001';
+document.getElementById('sId').textContent=appId;
+let stripe,elements,cardEl;
+async function initStripe(){
+  // TODO: Replace with real key: const stripe=Stripe('pk_live_...')
+  // For demo, we mock the card element
+  try{
+    stripe=Stripe('pk_test_51PLACEHOLDER_replace_with_real_key');
+    elements=stripe.elements();
+    cardEl=elements.create('card',{style:{base:{fontFamily:'Outfit,sans-serif',fontSize:'15px',color:'#1A1A2E','::placeholder':{color:'#9CA3AF'}}}});
+    cardEl.mount('#card-element');
+    cardEl.on('focus',()=>document.getElementById('card-element').classList.add('focused'));
+    cardEl.on('blur',()=>document.getElementById('card-element').classList.remove('focused'));
+    cardEl.on('change',e=>{document.getElementById('card-errors').textContent=e.error?e.error.message:'';});
+  }catch(e){ document.getElementById('card-element').innerHTML='<p class="text-sm text-dusk/60 p-2">⚠️ Stripe not configured. Add your publishable key to activate payments.</p>'; }
+}
+async function processPayment(){
+  const btn=document.getElementById('payBtn');
+  btn.disabled=true; btn.innerHTML='⟳ Processing…';
+  // TODO: const res=await fetch('/api/payments/create-intent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({application_id:appId,amount:200,currency:'USD',description:'$200 placement deposit'})});
+  // const {client_secret}=await res.json();
+  // const {paymentIntent,error}=await stripe.confirmCardPayment(client_secret,{payment_method:{card:cardEl,billing_details:{name:document.getElementById('cardName').value}}});
+  await new Promise(r=>setTimeout(r,2000)); // Demo delay
+  document.getElementById('pForm').classList.add('hidden');
+  document.getElementById('pSuccess').classList.remove('hidden');
+  document.getElementById('payRef').textContent='Reference: pi_demo_'+Date.now();
+}
+initStripe();
+</script>
+</body></html>

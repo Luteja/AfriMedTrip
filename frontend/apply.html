@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply — AfriMedTrip</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { savanna:'#C8860A','savanna-light':'#F5E6C8','savanna-dark':'#8B5E07',forest:'#1C4A2A','forest-mid':'#2E7D32','forest-light':'#E8F5E9',sand:'#FDF6E3',dusk:'#1A1A2E' },
+        fontFamily: { display:['Cormorant Garamond','serif'], body:['Outfit','sans-serif'] }
+      }}
+    }
+  </script>
+  <link rel="stylesheet" href="../css/main.css"/>
+</head>
+<body class="font-body bg-sand text-dusk">
+
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full z-50">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="../index.html" class="font-display font-bold text-xl text-forest nav-logo-text">AfriMedTrip<span class="text-savanna">.com</span></a>
+    <a href="../index.html" class="text-sm text-dusk/60 hover:text-forest transition-colors">← Back to Home</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header text-white relative z-10">
+  <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+    <span class="inline-block bg-white/10 border border-white/20 rounded-full px-4 py-1 text-xs font-bold tracking-widest uppercase mb-4">2026 Applications Open</span>
+    <h1 class="font-display text-5xl md:text-6xl font-bold mb-4">Apply for a Placement</h1>
+    <p class="text-white/70 text-lg">Complete all 4 steps. No deposit required to apply — $200 deposit is only requested after your application is approved.</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="sticky top-16 z-40 bg-white border-b border-gray-100 shadow-sm">
+  <div class="max-w-3xl mx-auto px-6 py-3 flex items-center gap-4">
+    <span id="progressLabel" class="text-xs font-semibold text-dusk/50 shrink-0">Step 1 of 4</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-forest to-savanna rounded-full transition-all duration-500" style="width:25%"></div>
+    </div>
+    <div class="hidden sm:flex items-center gap-2">
+      <span id="s1dot" class="step-dot w-7 h-7 rounded-full bg-forest text-white text-xs font-bold flex items-center justify-center">1</span>
+      <span id="s2dot" class="step-dot w-7 h-7 rounded-full bg-gray-200 text-gray-500 text-xs font-bold flex items-center justify-center">2</span>
+      <span id="s3dot" class="step-dot w-7 h-7 rounded-full bg-gray-200 text-gray-500 text-xs font-bold flex items-center justify-center">3</span>
+      <span id="s4dot" class="step-dot w-7 h-7 rounded-full bg-gray-200 text-gray-500 text-xs font-bold flex items-center justify-center">4</span>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-3xl mx-auto px-6 py-12">
+
+  <!-- ─── STEP 1: Personal Info ─── -->
+  <div data-step="1">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="bg-forest-light border-b border-forest/10 px-8 py-5">
+        <h2 class="font-display text-2xl font-bold text-forest">Personal Information</h2>
+        <p class="text-dusk/55 text-sm mt-1">Tell us about yourself</p>
+      </div>
+      <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label class="form-label">First Name *</label>
+          <input class="form-input" type="text" id="firstName" placeholder="Anna"/>
+        </div>
+        <div>
+          <label class="form-label">Last Name *</label>
+          <input class="form-input" type="text" id="lastName" placeholder="Smith"/>
+        </div>
+        <div>
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" id="email" placeholder="you@email.com"/>
+        </div>
+        <div>
+          <label class="form-label">Phone / WhatsApp *</label>
+          <input class="form-input" type="tel" id="phone" placeholder="+44 7700 900000"/>
+        </div>
+        <div>
+          <label class="form-label">Date of Birth *</label>
+          <input class="form-input" type="date" id="dob"/>
+        </div>
+        <div>
+          <label class="form-label">Nationality *</label>
+          <select class="form-select" id="nationality">
+            <option value="">Select country…</option>
+            <option>United Kingdom</option><option>Germany</option><option>France</option>
+            <option>United States</option><option>Canada</option><option>Australia</option>
+            <option>Netherlands</option><option>Sweden</option><option>Switzerland</option>
+            <option>South Africa</option><option>Nigeria</option><option>Kenya</option>
+            <option>Tanzania</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">University / Institution *</label>
+          <input class="form-input" type="text" id="university" placeholder="University of Edinburgh"/>
+        </div>
+        <div>
+          <label class="form-label">Academic Level *</label>
+          <select class="form-select" id="level">
+            <option value="">Select…</option>
+            <option>Pre-Medical Student</option>
+            <option>Medical Student (Year 1–2)</option>
+            <option>Medical Student (Year 3–5)</option>
+            <option>Junior Doctor / Intern</option>
+            <option>Nursing Student</option>
+            <option>Allied Health Professional</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <button onclick="nextStep(1)" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-mid text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg">
+        Continue — Placement Details
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 2: Placement Details ─── -->
+  <div data-step="2" class="hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="bg-forest-light border-b border-forest/10 px-8 py-5">
+        <h2 class="font-display text-2xl font-bold text-forest">Placement Preferences</h2>
+        <p class="text-dusk/55 text-sm mt-1">Choose your destination, duration and specialty</p>
+      </div>
+      <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="sm:col-span-2">
+          <label class="form-label">Preferred City / Destination *</label>
+          <div class="grid grid-cols-3 gap-3" id="cityPicker">
+            <label class="city-option cursor-pointer">
+              <input type="radio" name="city" value="Arusha" class="sr-only peer"/>
+              <div class="peer-checked:border-forest peer-checked:bg-forest-light border-2 border-gray-200 rounded-xl p-4 text-center transition-all hover:border-forest/40">
+                <div class="text-2xl mb-2">🦒</div>
+                <div class="font-semibold text-sm text-dusk">Arusha</div>
+                <div class="text-xs text-dusk/50 mt-0.5">Safari Hub</div>
+              </div>
+            </label>
+            <label class="city-option cursor-pointer">
+              <input type="radio" name="city" value="Dar es Salaam" class="sr-only peer"/>
+              <div class="peer-checked:border-forest peer-checked:bg-forest-light border-2 border-gray-200 rounded-xl p-4 text-center transition-all hover:border-forest/40">
+                <div class="text-2xl mb-2">🌊</div>
+                <div class="font-semibold text-sm text-dusk">Dar es Salaam</div>
+                <div class="text-xs text-dusk/50 mt-0.5">Urban Medicine</div>
+              </div>
+            </label>
+            <label class="city-option cursor-pointer">
+              <input type="radio" name="city" value="Zanzibar" class="sr-only peer"/>
+              <div class="peer-checked:border-forest peer-checked:bg-forest-light border-2 border-gray-200 rounded-xl p-4 text-center transition-all hover:border-forest/40">
+                <div class="text-2xl mb-2">🏝️</div>
+                <div class="font-semibold text-sm text-dusk">Zanzibar</div>
+                <div class="text-xs text-dusk/50 mt-0.5">Island Life</div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Number of Weeks *</label>
+          <select class="form-select" id="weeks">
+            <option value="">Select…</option>
+            <option>2 Weeks</option><option>3 Weeks</option><option>4 Weeks</option>
+            <option>6 Weeks</option><option>8 Weeks</option><option>12 Weeks</option>
+            <option>Custom (specify in notes)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Preferred Start Date *</label>
+          <input class="form-input" type="date" id="startDate"/>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="form-label">Preferred Specialty *</label>
+          <select class="form-select" id="specialty">
+            <option value="">Select…</option>
+            <option>Internal Medicine</option>
+            <option>Pediatrics</option>
+            <option>Surgery</option>
+            <option>Obstetrics & Gynecology</option>
+            <option>Emergency Medicine</option>
+            <option>Infectious Diseases</option>
+            <option>Community & Public Health</option>
+            <option>Pharmacology</option>
+            <option>Multiple / Flexible (please specify in notes)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Previous Clinical Experience</label>
+          <select class="form-select" id="experience">
+            <option value="">Select…</option>
+            <option>None — first placement</option>
+            <option>Some — clinical observer</option>
+            <option>Moderate — rotations completed</option>
+            <option>Extensive — qualified professional</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">How did you hear about us?</label>
+          <select class="form-select" id="source">
+            <option value="">Select…</option>
+            <option>Google Search</option>
+            <option>Instagram / Social Media</option>
+            <option>Friend / Word of Mouth</option>
+            <option>University / Medical School</option>
+            <option>Medical Forum / Community</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <button onclick="goToStep(1)" class="px-6 py-3 text-sm font-semibold text-dusk/60 hover:text-dusk border border-gray-200 rounded-xl transition-all">← Back</button>
+      <button onclick="nextStep(2)" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-mid text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg">
+        Continue — Safari Options
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 3: Safari & Tour Options ─── -->
+  <div data-step="3" class="hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="bg-savanna-light border-b border-savanna/20 px-8 py-5">
+        <h2 class="font-display text-2xl font-bold text-savanna-dark">Safari & Tour Options</h2>
+        <p class="text-dusk/55 text-sm mt-1">All add-ons are optional. Pricing confirmed after approval.</p>
+      </div>
+      <div class="p-8">
+        <div class="space-y-4">
+          <label class="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-savanna/40 transition-all peer-checked:border-savanna has-[:checked]:border-savanna has-[:checked]:bg-savanna-light">
+            <input type="checkbox" name="safari" value="serengeti_day" class="mt-1 w-4 h-4 accent-savanna"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-dusk flex items-center gap-2">🦁 Serengeti Day Trip <span class="text-xs bg-savanna-light text-savanna-dark px-2 py-0.5 rounded-full font-bold">Group</span></div>
+                <div class="text-savanna font-bold">$400–$550</div>
+              </div>
+              <p class="text-dusk/55 text-sm mt-1">Full-day game drive. Big Five, expert guide, packed lunch. Departs from Arusha.</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-savanna/40 transition-all has-[:checked]:border-savanna has-[:checked]:bg-savanna-light">
+            <input type="checkbox" name="safari" value="serengeti_overnight" class="mt-1 w-4 h-4 accent-savanna"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-dusk">⛺ Serengeti 2–3 Night Safari</div>
+                <div class="text-savanna font-bold">$600–$1,200</div>
+              </div>
+              <p class="text-dusk/55 text-sm mt-1">Overnight tented camp inside the Serengeti. Sunrise drives, star gazing, full board.</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-savanna/40 transition-all has-[:checked]:border-savanna has-[:checked]:bg-savanna-light">
+            <input type="checkbox" name="safari" value="zanzibar" class="mt-1 w-4 h-4 accent-savanna"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-dusk">🏝️ Zanzibar Island Extension</div>
+                <div class="text-savanna font-bold">$300–$800</div>
+              </div>
+              <p class="text-dusk/55 text-sm mt-1">2–7 day extension. Stone Town, Nungwi Beach, spice tour, dhow snorkel cruise.</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-savanna/40 transition-all has-[:checked]:border-savanna has-[:checked]:bg-savanna-light">
+            <input type="checkbox" name="safari" value="ngorongoro" class="mt-1 w-4 h-4 accent-savanna"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-dusk">🌋 Ngorongoro Crater Day Trip</div>
+                <div class="text-savanna font-bold">$350–$500</div>
+              </div>
+              <p class="text-dusk/55 text-sm mt-1">World's largest intact volcanic caldera. Dense wildlife, flamingos, Maasai village visit.</p>
+            </div>
+          </label>
+          <label class="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-savanna/40 transition-all has-[:checked]:border-savanna has-[:checked]:bg-savanna-light">
+            <input type="checkbox" name="safari" value="private_room" class="mt-1 w-4 h-4 accent-savanna"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-dusk">🛏️ Private Room Upgrade</div>
+                <div class="text-savanna font-bold">$200/week</div>
+              </div>
+              <p class="text-dusk/55 text-sm mt-1">Upgrade from shared to private ensuite accommodation for your entire stay.</p>
+            </div>
+          </label>
+        </div>
+        <div class="mt-6">
+          <label class="form-label">Additional Tour Requests or Notes</label>
+          <textarea class="form-input" id="tourNotes" rows="3" placeholder="Any specific safari interests, dietary requirements, or questions about add-ons…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <button onclick="goToStep(2)" class="px-6 py-3 text-sm font-semibold text-dusk/60 hover:text-dusk border border-gray-200 rounded-xl transition-all">← Back</button>
+      <button onclick="nextStep(3)" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-mid text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg">
+        Continue — Review & Submit
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── STEP 4: Review & Submit ─── -->
+  <div data-step="4" class="hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="bg-forest-light border-b border-forest/10 px-8 py-5">
+        <h2 class="font-display text-2xl font-bold text-forest">Review & Submit</h2>
+        <p class="text-dusk/55 text-sm mt-1">Check your details before submitting</p>
+      </div>
+      <div class="p-8">
+        <div id="reviewSummary" class="space-y-6"></div>
+        <div class="mt-6">
+          <label class="form-label">Motivation Statement *</label>
+          <textarea class="form-input" id="motivation" rows="4" placeholder="Tell us why you want to do a clinical rotation in Tanzania and what you hope to gain from this experience…"></textarea>
+        </div>
+        <div class="mt-4 p-4 bg-savanna-light border border-savanna/20 rounded-2xl">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl">💳</span>
+            <div>
+              <div class="font-semibold text-savanna-dark text-sm">No payment required now</div>
+              <p class="text-dusk/60 text-sm mt-1">A $200 deposit link will be sent via email <strong>only after your application is reviewed and approved</strong>. Approval typically takes 24–48 hours.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="termsCheck" class="mt-1 w-4 h-4 accent-forest"/>
+            <span class="text-sm text-dusk/70">I confirm the information above is accurate and I agree to AfriMedTrip's <a href="#" class="text-forest font-semibold underline">Terms & Conditions</a> and <a href="#" class="text-forest font-semibold underline">Privacy Policy</a>.</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <button onclick="goToStep(3)" class="px-6 py-3 text-sm font-semibold text-dusk/60 hover:text-dusk border border-gray-200 rounded-xl transition-all">← Back</button>
+      <button onclick="submitApplication()" class="inline-flex items-center gap-2 bg-savanna hover:bg-savanna-dark text-white font-bold px-10 py-4 rounded-xl transition-all shadow-xl text-lg">
+        🌍 Submit Application
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── SUCCESS ─── -->
+  <div data-step="5" class="hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden text-center py-16 px-8">
+      <div class="text-6xl mb-6">🌍</div>
+      <h2 class="font-display text-4xl font-bold text-forest mb-4">Application Submitted!</h2>
+      <p class="text-dusk/65 text-lg max-w-md mx-auto mb-8">Thank you! Our team will review your application and contact you within <strong>24–48 hours</strong>. Check your email for confirmation.</p>
+      <div class="bg-forest-light rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left">
+        <div class="font-semibold text-forest text-sm mb-3">What happens next?</div>
+        <div class="space-y-3 text-sm text-dusk/70">
+          <div class="flex gap-2"><span class="text-forest font-bold">1.</span> Team reviews your application</div>
+          <div class="flex gap-2"><span class="text-forest font-bold">2.</span> Coordinator contacts you within 48hrs</div>
+          <div class="flex gap-2"><span class="text-forest font-bold">3.</span> Upon approval, $200 deposit link sent</div>
+          <div class="flex gap-2"><span class="text-forest font-bold">4.</span> Placement confirmed — prepare to fly!</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="../pages/schedule.html" class="inline-flex items-center gap-2 bg-forest text-white font-bold px-8 py-3 rounded-xl">Book Zoom Call Too</a>
+        <a href="../index.html" class="inline-flex items-center gap-2 border-2 border-forest text-forest font-semibold px-8 py-3 rounded-xl">Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+  // ── Step validation & navigation ──
+  function nextStep(step) {
+    if (!validateStep(step)) return;
+    if (step === 3) buildReview();
+    const dots = ['s1dot','s2dot','s3dot','s4dot'];
+    dots.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (i < step) { el.className = 'step-dot w-7 h-7 rounded-full bg-forest text-white text-xs font-bold flex items-center justify-center'; el.textContent = '✓'; }
+      else if (i === step) { el.className = 'step-dot w-7 h-7 rounded-full bg-forest text-white text-xs font-bold flex items-center justify-center'; el.textContent = step + 1; }
+    });
+    goToStep(step + 1);
+  }
+
+  function validateStep(step) {
+    const required = {
+      1: ['firstName','lastName','email','phone','dob','nationality','university','level'],
+      2: ['weeks','startDate','specialty'],
+      3: [],
+    };
+    const fields = required[step] || [];
+    let ok = true;
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el || !el.value.trim()) {
+        el && (el.style.borderColor = '#C62828');
+        ok = false;
+      } else { el.style.borderColor = ''; }
+    });
+    if (step === 2) {
+      const city = document.querySelector('input[name="city"]:checked');
+      if (!city) { showToast('Please select a destination city.', 'error'); ok = false; }
+    }
+    if (!ok) showToast('Please complete all required fields.', 'error');
+    return ok;
+  }
+
+  function buildReview() {
+    const city = document.querySelector('input[name="city"]:checked')?.value || '—';
+    const safaris = [...document.querySelectorAll('input[name="safari"]:checked')].map(el => el.value).join(', ') || 'None selected';
+    const html = `
+      <div>
+        <h4 class="font-semibold text-xs uppercase tracking-wider text-dusk/40 mb-3">Personal Details</h4>
+        <div class="grid grid-cols-2 gap-3">
+          ${reviewItem('Name', `${v('firstName')} ${v('lastName')}`)}
+          ${reviewItem('Email', v('email'))}
+          ${reviewItem('Phone', v('phone'))}
+          ${reviewItem('Nationality', v('nationality'))}
+          ${reviewItem('University', v('university'))}
+          ${reviewItem('Level', v('level'))}
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-xs uppercase tracking-wider text-dusk/40 mb-3">Placement Details</h4>
+        <div class="grid grid-cols-2 gap-3">
+          ${reviewItem('City', city)}
+          ${reviewItem('Duration', v('weeks'))}
+          ${reviewItem('Start Date', v('startDate'))}
+          ${reviewItem('Specialty', v('specialty'))}
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-xs uppercase tracking-wider text-dusk/40 mb-3">Safari Add-ons</h4>
+        <div class="bg-savanna-light rounded-xl px-4 py-3 text-sm text-savanna-dark font-medium">${safaris}</div>
+      </div>`;
+    document.getElementById('reviewSummary').innerHTML = html;
+  }
+
+  function v(id) { return document.getElementById(id)?.value || '—'; }
+  function reviewItem(label, value) {
+    return `<div class="bg-gray-50 rounded-xl px-4 py-3"><div class="text-xs text-dusk/40 mb-1">${label}</div><div class="font-semibold text-sm text-dusk">${value}</div></div>`;
+  }
+
+  function submitApplication() {
+    if (!document.getElementById('termsCheck').checked) { showToast('Please agree to the terms to continue.', 'error'); return; }
+    if (!document.getElementById('motivation').value.trim()) { showToast('Please add a motivation statement.', 'error'); return; }
+
+    const data = {
+      firstName: v('firstName'), lastName: v('lastName'), email: v('email'),
+      phone: v('phone'), nationality: v('nationality'), university: v('university'),
+      level: v('level'), city: document.querySelector('input[name="city"]:checked')?.value,
+      weeks: v('weeks'), startDate: v('startDate'), specialty: v('specialty'),
+      safaris: [...document.querySelectorAll('input[name="safari"]:checked')].map(e=>e.value),
+      motivation: v('motivation'),
+    };
+
+    // TODO: POST to /api/applications
+    console.log('Application data:', data);
+    // fetch('/api/applications', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+
+    showToast('Application submitted! Redirecting…', 'success');
+    document.getElementById('progressBar').style.width = '100%';
+    setTimeout(() => goToStep(5), 1200);
+  }
+</script>
+</body>
+</html>

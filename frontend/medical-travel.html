@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Medical Travel Abroad — AfriMedTrip</title>
+<meta name="description" content="AfriMedTrip connects Tanzanian patients with world-class hospitals in India, Turkey, USA, Canada and UK. Expert coordination, visa assistance, and end-to-end medical travel support."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      savanna:'#C8860A','savanna-light':'#F5E6C8','savanna-dark':'#8B5E07',
+      forest:'#1C4A2A','forest-mid':'#2E7D32','forest-light':'#E8F5E9',
+      sand:'#FDF6E3',dusk:'#1A1A2E',
+      'medical-blue':'#1565C0','medical-blue-light':'#E3F2FD',
+      'medical-teal':'#00695C','medical-teal-light':'#E0F2F1',
+    },
+    fontFamily: { display:['Cormorant Garamond','serif'], body:['Outfit','sans-serif'] }
+  }}
+}
+</script>
+<link rel="stylesheet" href="../css/main.css"/>
+<style>
+.hero-medical {
+  background: linear-gradient(135deg, rgba(21,101,192,0.92) 0%, rgba(28,74,42,0.85) 60%, rgba(26,26,46,0.9) 100%),
+    url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1920&q=80') center/cover;
+  min-height: 92vh;
+}
+.country-card { transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.country-card:hover { transform: translateY(-10px) scale(1.02); }
+.process-line::after {
+  content: '';
+  position: absolute;
+  top: 28px; left: calc(100% - 10px);
+  width: calc(100% - 20px); height: 2px;
+  background: linear-gradient(90deg, #C8860A, transparent);
+}
+.specialty-pill {
+  transition: all 0.25s; cursor: default;
+  background: white; border: 1.5px solid #E0E0E0;
+}
+.specialty-pill:hover { border-color: #1565C0; background: #E3F2FD; transform: translateY(-2px); }
+.cost-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 3px solid #C8860A;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: white; box-shadow: 0 8px 32px rgba(200,134,10,0.15);
+}
+.globe-pulse { animation: globePulse 3s ease-in-out infinite; }
+@keyframes globePulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.08);opacity:1} }
+.slide-in { opacity:0; transform:translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.slide-in.vis { opacity:1; transform:translateY(0); }
+.country-flag { font-size: 2.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.testimonial-bg {
+  background: linear-gradient(135deg, #1C4A2A, #1565C0);
+}
+/* Accordion */
+.faq-body { max-height:0; overflow:hidden; transition: max-height 0.4s ease; }
+.faq-body.open { max-height: 400px; }
+.faq-icon { transition: transform 0.3s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+</style>
+</head>
+<body class="font-body text-dusk overflow-x-hidden">
+
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-savanna rounded-lg flex items-center justify-center">
+        <span class="text-white font-display font-bold text-sm">A</span>
+      </div>
+      <span class="font-display font-bold text-xl nav-logo-text" style="color:white">AfriMedTrip<span class="text-savanna">.com</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-7">
+      <a href="../index.html" class="text-sm font-medium text-white/80 hover:text-white transition-colors">Home</a>
+      <a href="rotations.html" class="text-sm font-medium text-white/80 hover:text-white transition-colors">Rotations</a>
+      <a href="safari.html" class="text-sm font-medium text-white/80 hover:text-white transition-colors">Safari</a>
+      <a href="medical-travel.html" class="text-sm font-semibold text-savanna border-b border-savanna pb-0.5">Medical Travel</a>
+      <a href="apply.html" class="text-sm font-bold bg-savanna hover:bg-savanna-dark text-white px-5 py-2 rounded-lg transition-all">Apply Now</a>
+    </div>
+    <button id="mobileMenuBtn" class="md:hidden text-white p-2">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="19" y2="6"/><line x1="3" y1="12" x2="19" y2="12"/><line x1="3" y1="18" x2="19" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="mobileMenu" class="hidden bg-dusk text-white px-6 pb-5 pt-2 flex-col gap-3">
+    <a href="../index.html" class="py-2 border-b border-white/10 text-sm">Home</a>
+    <a href="rotations.html" class="py-2 border-b border-white/10 text-sm">Rotations</a>
+    <a href="medical-travel.html" class="py-2 border-b border-white/10 text-sm text-savanna font-semibold">Medical Travel Abroad</a>
+    <a href="apply.html" class="mt-2 text-center bg-savanna text-white font-bold py-3 rounded-xl text-sm">Apply Now</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero-medical flex items-center relative overflow-hidden">
+  <!-- Animated orbs -->
+  <div class="absolute top-20 right-20 w-96 h-96 rounded-full opacity-10 animate-pulse" style="background:radial-gradient(circle,#1565C0,transparent)"></div>
+  <div class="absolute bottom-20 left-1/4 w-64 h-64 rounded-full opacity-10" style="background:radial-gradient(circle,#C8860A,transparent);animation:globePulse 4s ease-in-out infinite"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 pt-28 pb-20 w-full">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 border border-white/20 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
+          <span class="w-2 h-2 bg-savanna rounded-full animate-pulse"></span>
+          <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Outbound Medical Travel · Tanzania</span>
+        </div>
+        <h1 class="font-display text-5xl md:text-7xl font-bold text-white leading-[1.05] mb-6">
+          World-Class<br>
+          Treatment,<br>
+          <em class="text-savanna">Globally.</em>
+        </h1>
+        <p class="text-white/70 text-lg leading-relaxed mb-8 max-w-xl">
+          AfriMedTrip coordinates medical travel for Tanzanian patients seeking advanced treatment abroad — from initial consultation to safe return home. Expert support every step of the way.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a href="#enquire" class="inline-flex items-center gap-2 bg-savanna hover:bg-savanna-dark text-white font-bold px-8 py-4 rounded-xl transition-all shadow-2xl hover:-translate-y-0.5">
+            Get Free Consultation
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#destinations" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl border border-white/25 transition-all">
+            View Destinations
+          </a>
+        </div>
+        <!-- Stats -->
+        <div class="flex flex-wrap gap-6">
+          <div><div class="font-display text-3xl font-bold text-savanna">5</div><div class="text-white/55 text-xs mt-0.5">Countries</div></div>
+          <div class="w-px bg-white/15"></div>
+          <div><div class="font-display text-3xl font-bold text-savanna">50+</div><div class="text-white/55 text-xs mt-0.5">Partner Hospitals</div></div>
+          <div class="w-px bg-white/15"></div>
+          <div><div class="font-display text-3xl font-bold text-savanna">24/7</div><div class="text-white/55 text-xs mt-0.5">Patient Support</div></div>
+          <div class="w-px bg-white/15"></div>
+          <div><div class="font-display text-3xl font-bold text-savanna">100%</div><div class="text-white/55 text-xs mt-0.5">Coordinated End-to-End</div></div>
+        </div>
+      </div>
+
+      <!-- Floating destination cards -->
+      <div class="hidden lg:flex flex-col gap-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 hover:bg-white/18 transition-all">
+            <div class="text-3xl mb-2">🇮🇳</div>
+            <div class="text-white font-bold text-sm mb-1">India</div>
+            <div class="text-white/55 text-xs">Apollo, Fortis, AIIMS. World's most affordable advanced care.</div>
+            <div class="text-savanna font-bold text-xs mt-2">Save up to 80%</div>
+          </div>
+          <div class="bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 hover:bg-white/18 transition-all">
+            <div class="text-3xl mb-2">🇹🇷</div>
+            <div class="text-white font-bold text-sm mb-1">Turkey</div>
+            <div class="text-white/55 text-xs">JCI-accredited hospitals. Cardiac, oncology & transplants.</div>
+            <div class="text-savanna font-bold text-xs mt-2">European standards</div>
+          </div>
+          <div class="bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 hover:bg-white/18 transition-all">
+            <div class="text-3xl mb-2">🇬🇧</div>
+            <div class="text-white font-bold text-sm mb-1">United Kingdom</div>
+            <div class="text-white/55 text-xs">NHS-affiliated private hospitals. Premier neurology & oncology.</div>
+            <div class="text-savanna font-bold text-xs mt-2">NHS specialists</div>
+          </div>
+          <div class="bg-white/12 backdrop-blur-md border border-white/20 rounded-2xl p-5 hover:bg-white/18 transition-all">
+            <div class="text-3xl mb-2">🇺🇸</div>
+            <div class="text-white font-bold text-sm mb-1">USA / Canada</div>
+            <div class="text-white/55 text-xs">Mayo Clinic, Johns Hopkins, Toronto General. Cutting-edge research.</div>
+            <div class="text-savanna font-bold text-xs mt-2">World #1 hospitals</div>
+          </div>
+        </div>
+        <div class="bg-white/08 backdrop-blur-sm border border-white/15 rounded-2xl px-6 py-4 flex items-center gap-4">
+          <div class="text-2xl">🛡️</div>
+          <div>
+            <div class="text-white font-semibold text-sm">Fully Coordinated — No Stress</div>
+            <div class="text-white/50 text-xs mt-0.5">Visa, flights, hospital appointment, accommodation & return — all managed by AfriMedTrip.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="bg-dusk py-6">
+  <div class="max-w-7xl mx-auto px-6 flex flex-wrap gap-6 items-center justify-center md:justify-between text-sm">
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Free initial consultation</div>
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Visa & travel assistance</div>
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Hospital appointment booking</div>
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Accommodation & transfers</div>
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Medical record translation</div>
+    <div class="flex items-center gap-2 text-white/70"><span class="text-savanna text-lg">✓</span>Post-treatment follow-up</div>
+  </div>
+</div>
+
+<!-- ═══ WHAT IS MEDICAL TRAVEL ═══ -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="slide-in">
+        <span class="inline-block bg-medical-blue-light text-medical-blue text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6">Medical Tourism</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk mb-6 leading-tight">
+          Why Travel Abroad<br>
+          <em class="text-medical-blue">for Treatment?</em>
+        </h2>
+        <p class="text-dusk/65 text-lg leading-relaxed mb-6">
+          When advanced medical procedures, specialist expertise, or shorter waiting times are needed, travelling abroad for treatment can be life-changing. AfriMedTrip connects Tanzanian patients with the world's best healthcare systems.
+        </p>
+        <div class="space-y-4">
+          <div class="flex gap-4 p-4 bg-medical-blue-light rounded-2xl">
+            <div class="text-2xl shrink-0">💰</div>
+            <div>
+              <div class="font-semibold text-sm mb-1">Significant Cost Savings</div>
+              <div class="text-dusk/60 text-sm">Advanced procedures in India and Turkey can cost 60–80% less than equivalent treatment in Western countries — without compromising quality.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 p-4 bg-forest-light rounded-2xl">
+            <div class="text-2xl shrink-0">🏥</div>
+            <div>
+              <div class="font-semibold text-sm mb-1">Access to Specialist Expertise</div>
+              <div class="text-dusk/60 text-sm">World-renowned specialists in cardiac surgery, oncology, neurosurgery, organ transplants, and complex procedures not available locally.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 p-4 bg-savanna-light rounded-2xl">
+            <div class="text-2xl shrink-0">⚡</div>
+            <div>
+              <div class="font-semibold text-sm mb-1">No Long Waiting Times</div>
+              <div class="text-dusk/60 text-sm">Skip months-long waiting lists. Our partner hospitals offer priority appointments for international patients.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-in">
+        <div class="relative">
+          <div class="bg-gradient-to-br from-medical-blue to-forest rounded-3xl p-8 text-white">
+            <h3 class="font-display text-2xl font-bold mb-6">Treatment Cost Comparison</h3>
+            <div class="space-y-5">
+              <div>
+                <div class="flex justify-between text-sm mb-2"><span class="text-white/80">Heart Bypass Surgery</span></div>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$5-8K</div><div class="text-white/60 mt-1">India</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$10-15K</div><div class="text-white/60 mt-1">Turkey</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-white/50 text-base">$80-120K</div><div class="text-white/60 mt-1">USA</div></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2"><span class="text-white/80">Hip Replacement</span></div>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$6-9K</div><div class="text-white/60 mt-1">India</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$8-12K</div><div class="text-white/60 mt-1">Turkey</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-white/50 text-base">$30-50K</div><div class="text-white/60 mt-1">USA</div></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-2"><span class="text-white/80">Liver Transplant</span></div>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$30-40K</div><div class="text-white/60 mt-1">India</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-savanna text-base">$50-70K</div><div class="text-white/60 mt-1">Turkey</div></div>
+                  <div class="bg-white/10 rounded-lg p-3 text-center"><div class="font-bold text-white/50 text-base">$250-500K</div><div class="text-white/60 mt-1">USA</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 bg-white/10 rounded-xl p-4 text-xs text-white/65">
+              * Estimates only. Exact costs confirmed after medical assessment. Includes hospital fees, surgeon, and standard stay.
+            </div>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute -top-4 -right-4 bg-savanna text-white rounded-2xl px-4 py-3 shadow-xl text-center">
+            <div class="font-display text-2xl font-bold">80%</div>
+            <div class="text-xs font-medium">avg. savings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DESTINATIONS ═══ -->
+<section id="destinations" class="py-24 bg-sand">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-16 slide-in">
+      <span class="inline-block bg-savanna-light text-savanna-dark text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Partner Destinations</span>
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-dusk">Our Medical Travel<br>Destinations</h2>
+      <p class="text-dusk/55 mt-4 max-w-xl mx-auto text-lg">Five countries. Hundreds of specialists. One trusted coordinator.</p>
+    </div>
+
+    <div class="space-y-8">
+
+      <!-- India -->
+      <div class="country-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 slide-in">
+        <div class="grid lg:grid-cols-3">
+          <div class="lg:col-span-1 p-8 flex flex-col justify-between" style="background:linear-gradient(135deg,#FF6B35 0%,#FF8C00 100%)">
+            <div>
+              <div class="country-flag mb-4">🇮🇳</div>
+              <h3 class="font-display text-4xl font-bold text-white mb-2">India</h3>
+              <p class="text-white/75 text-sm leading-relaxed">The world's top medical tourism destination. JCI-accredited hospitals with world-class specialists at a fraction of Western costs.</p>
+            </div>
+            <div class="mt-6">
+              <div class="text-white/60 text-xs mb-1">Savings vs Western countries</div>
+              <div class="font-display text-3xl font-bold text-white">60–80%</div>
+            </div>
+          </div>
+          <div class="lg:col-span-2 p-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Partner Hospitals</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>Apollo Hospitals (Delhi, Chennai, Mumbai)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>Fortis Memorial Research Institute</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>Medanta — The Medicity</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>AIIMS New Delhi</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>Narayana Health (Bangalore)</div>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Top Specialties</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Cardiac Surgery</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Oncology</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Organ Transplant</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Orthopedics</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Neurosurgery</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">IVF & Fertility</span>
+                  <span class="bg-orange-50 text-orange-700 text-xs px-3 py-1 rounded-full font-medium">Nephrology</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between">
+              <div class="flex gap-6 text-sm text-dusk/60">
+                <span>✈️ ~5-6 hrs from Dar es Salaam</span>
+                <span>🏨 Accommodation arranged</span>
+                <span>🛂 Visa assistance included</span>
+              </div>
+              <a href="#enquire" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">Enquire for India →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Turkey -->
+      <div class="country-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 slide-in">
+        <div class="grid lg:grid-cols-3">
+          <div class="lg:col-span-1 p-8 flex flex-col justify-between" style="background:linear-gradient(135deg,#C0392B 0%,#E74C3C 100%)">
+            <div>
+              <div class="country-flag mb-4">🇹🇷</div>
+              <h3 class="font-display text-4xl font-bold text-white mb-2">Turkey</h3>
+              <p class="text-white/75 text-sm leading-relaxed">Europe's medical tourism hub. 50+ JCI-accredited hospitals, world-class cardiac care and oncology at European quality.</p>
+            </div>
+            <div class="mt-6">
+              <div class="text-white/60 text-xs mb-1">Savings vs Western countries</div>
+              <div class="font-display text-3xl font-bold text-white">50–70%</div>
+            </div>
+          </div>
+          <div class="lg:col-span-2 p-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Partner Hospitals</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>Acibadem Healthcare Group</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>Memorial Hospitals Group</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>Medicana International</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>Liv Hospital Istanbul</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"></span>Güven Hospital Ankara</div>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Top Specialties</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Cardiology</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Hair Transplant</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Eye Surgery</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Dental</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Bariatric Surgery</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Oncology</span>
+                  <span class="bg-red-50 text-red-700 text-xs px-3 py-1 rounded-full font-medium">Aesthetics</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between">
+              <div class="flex gap-6 text-sm text-dusk/60">
+                <span>✈️ ~6-7 hrs from Dar es Salaam</span>
+                <span>🏨 Istanbul hotel packages</span>
+                <span>🛂 e-Visa (easy process)</span>
+              </div>
+              <a href="#enquire" class="bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">Enquire for Turkey →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- United Kingdom -->
+      <div class="country-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 slide-in">
+        <div class="grid lg:grid-cols-3">
+          <div class="lg:col-span-1 p-8 flex flex-col justify-between" style="background:linear-gradient(135deg,#012169 0%,#1565C0 100%)">
+            <div>
+              <div class="country-flag mb-4">🇬🇧</div>
+              <h3 class="font-display text-4xl font-bold text-white mb-2">United Kingdom</h3>
+              <p class="text-white/75 text-sm leading-relaxed">NHS-affiliated private hospitals. World leaders in neurology, oncology, cardiac surgery and complex procedures.</p>
+            </div>
+            <div class="mt-6">
+              <div class="text-white/60 text-xs mb-1">Standard of Care</div>
+              <div class="font-display text-2xl font-bold text-white">World-Class NHS</div>
+            </div>
+          </div>
+          <div class="lg:col-span-2 p-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Partner Hospitals</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>London Bridge Hospital</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>The Portland Hospital (London)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>Christie Hospital (Manchester)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>King Edward VII Hospital</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>BUPA Cromwell Hospital</div>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Top Specialties</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Neurology</span>
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Oncology</span>
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Cardiac</span>
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Paediatrics</span>
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Spinal Surgery</span>
+                  <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">Rare Diseases</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between">
+              <div class="flex gap-6 text-sm text-dusk/60">
+                <span>✈️ ~8-9 hrs from Dar es Salaam</span>
+                <span>🏨 London accommodation arranged</span>
+                <span>🛂 UK medical visa support</span>
+              </div>
+              <a href="#enquire" class="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">Enquire for UK →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USA & Canada -->
+      <div class="country-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 slide-in">
+        <div class="grid lg:grid-cols-3">
+          <div class="lg:col-span-1 p-8 flex flex-col justify-between" style="background:linear-gradient(135deg,#1C4A2A 0%,#2E7D32 100%)">
+            <div>
+              <div class="flex gap-2 mb-4">
+                <span class="country-flag" style="font-size:2rem">🇺🇸</span>
+                <span class="country-flag" style="font-size:2rem">🇨🇦</span>
+              </div>
+              <h3 class="font-display text-3xl font-bold text-white mb-2">USA & Canada</h3>
+              <p class="text-white/75 text-sm leading-relaxed">World's #1 and #4 ranked healthcare systems. The most advanced medical research and cutting-edge procedures.</p>
+            </div>
+            <div class="mt-6">
+              <div class="text-white/60 text-xs mb-1">World Ranking</div>
+              <div class="font-display text-3xl font-bold text-white">#1 & #4</div>
+            </div>
+          </div>
+          <div class="lg:col-span-2 p-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Partner Institutions</h4>
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Mayo Clinic (USA)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Johns Hopkins Hospital (USA)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Cleveland Clinic (USA)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Toronto General Hospital (Canada)</div>
+                  <div class="flex items-center gap-2 text-sm"><span class="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>Princess Margaret Cancer Centre (Canada)</div>
+                </div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-sm mb-3 text-dusk/70 uppercase tracking-wider">Top Specialties</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Complex Cancer</span>
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Rare Diseases</span>
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Clinical Trials</span>
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Gene Therapy</span>
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Transplants</span>
+                  <span class="bg-green-50 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Neurosurgery</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between">
+              <div class="flex gap-6 text-sm text-dusk/60">
+                <span>✈️ ~15-18 hrs from Dar es Salaam</span>
+                <span>🏨 Medical concierge hotels</span>
+                <span>🛂 US/Canada visa assistance</span>
+              </div>
+              <a href="#enquire" class="bg-forest hover:bg-forest-mid text-white font-bold px-6 py-2.5 rounded-xl text-sm transition-all">Enquire for USA/Canada →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SPECIALTIES COVERED ═══ -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-14 slide-in">
+      <span class="inline-block bg-medical-blue-light text-medical-blue text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Medical Specialties</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk">Conditions & Specialties<br>We Coordinate</h2>
+      <p class="text-dusk/55 mt-4 text-lg max-w-xl mx-auto">We arrange referrals and travel for a wide range of medical conditions across partner destinations.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🫀</span><span class="font-semibold text-sm">Cardiology &<br>Cardiac Surgery</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🧠</span><span class="font-semibold text-sm">Neurology &<br>Neurosurgery</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🔬</span><span class="font-semibold text-sm">Oncology &<br>Cancer Treatment</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🦴</span><span class="font-semibold text-sm">Orthopedics &<br>Joint Replacement</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🫁</span><span class="font-semibold text-sm">Organ Transplants<br>(Kidney, Liver, Heart)</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">👁️</span><span class="font-semibold text-sm">Ophthalmology &<br>Eye Surgery</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🦷</span><span class="font-semibold text-sm">Dental &<br>Oral Surgery</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">👶</span><span class="font-semibold text-sm">Pediatric &<br>Neonatal Care</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🩺</span><span class="font-semibold text-sm">Urology &<br>Kidney Disease</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🤱</span><span class="font-semibold text-sm">Fertility &<br>IVF Treatment</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🦴</span><span class="font-semibold text-sm">Spine Surgery &<br>Pain Management</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🧬</span><span class="font-semibold text-sm">Rare Diseases &<br>Clinical Trials</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">💊</span><span class="font-semibold text-sm">Endocrinology &<br>Diabetes</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🩻</span><span class="font-semibold text-sm">Bariatric &<br>Weight Loss Surgery</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">🧪</span><span class="font-semibold text-sm">Diagnostics &<br>Second Opinion</span></div>
+      <div class="specialty-pill rounded-2xl p-4 flex items-center gap-3 slide-in"><span class="text-2xl">✨</span><span class="font-semibold text-sm">Cosmetic &<br>Reconstructive Surgery</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="py-24 bg-sand">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-16 slide-in">
+      <span class="inline-block bg-savanna-light text-savanna-dark text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Our Process</span>
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-dusk">How Medical Travel Works</h2>
+      <p class="text-dusk/55 mt-4 text-lg max-w-xl mx-auto">From your first enquiry in Dar es Salaam to returning home recovered — we handle everything.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="relative slide-in">
+        <div class="hidden lg:block process-line absolute top-0 left-0 right-0 pointer-events-none"></div>
+        <div class="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 h-full">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-display text-5xl font-bold text-savanna/20 leading-none">01</span>
+            <span class="text-3xl">📞</span>
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2">Free Consultation</h3>
+          <p class="text-dusk/60 text-sm leading-relaxed">Contact us with your medical records and diagnosis. Our medical coordinator assesses your case and recommends the best destination and hospital.</p>
+        </div>
+      </div>
+      <div class="relative slide-in">
+        <div class="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 h-full">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-display text-5xl font-bold text-savanna/20 leading-none">02</span>
+            <span class="text-3xl">🏥</span>
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2">Hospital Appointment</h3>
+          <p class="text-dusk/60 text-sm leading-relaxed">We submit your medical records to partner hospitals, coordinate specialist review, confirm your appointment and obtain a treatment quote.</p>
+        </div>
+      </div>
+      <div class="relative slide-in">
+        <div class="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 h-full">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-display text-5xl font-bold text-savanna/20 leading-none">03</span>
+            <span class="text-3xl">✈️</span>
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2">Travel & Arrival</h3>
+          <p class="text-dusk/60 text-sm leading-relaxed">We arrange your medical visa, flights, and airport transfer. A local coordinator meets you and escorts you to the hospital or accommodation.</p>
+        </div>
+      </div>
+      <div class="relative slide-in">
+        <div class="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 h-full">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-display text-5xl font-bold text-savanna/20 leading-none">04</span>
+            <span class="text-3xl">🏠</span>
+          </div>
+          <h3 class="font-display text-xl font-bold mb-2">Treatment & Return</h3>
+          <p class="text-dusk/60 text-sm leading-relaxed">Receive your treatment with a dedicated case manager present. After recovery, we coordinate your safe return and arrange follow-up care in Tanzania.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHAT'S INCLUDED ═══ -->
+<section class="py-24 bg-forest text-white relative overflow-hidden">
+  <div class="absolute inset-0" style="background:radial-gradient(ellipse at top right,rgba(200,134,10,0.15),transparent 60%)"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+    <div class="text-center mb-14">
+      <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Everything Included in<br>Our Coordination Package</h2>
+      <p class="text-white/60 text-lg max-w-xl mx-auto">One fee covers all coordination services. You focus on your health — we handle the rest.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">📋</div>
+        <h4 class="font-semibold mb-2">Medical Records Coordination</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Collection, translation, and submission of all your medical documents to the destination hospital.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">🛂</div>
+        <h4 class="font-semibold mb-2">Medical Visa Assistance</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Visa application support with hospital invitation letters, documentation, and embassy guidance.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">✈️</div>
+        <h4 class="font-semibold mb-2">Flight Booking</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Best-value flights booked for patient and one companion. Medical equipment allowances arranged.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">🏨</div>
+        <h4 class="font-semibold mb-2">Accommodation</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Near-hospital serviced apartments or partner hotels for patient and companion. Long-stay rates negotiated.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">🚗</div>
+        <h4 class="font-semibold mb-2">Airport & Hospital Transfers</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Private vehicles for all transfers — airport, hotel, hospital appointments, and pharmacy runs.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">👩‍⚕️</div>
+        <h4 class="font-semibold mb-2">Dedicated Case Manager</h4>
+        <p class="text-white/60 text-sm leading-relaxed">A personal case manager available 24/7 throughout your stay. Interpreter services if needed.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">🔄</div>
+        <h4 class="font-semibold mb-2">Post-Treatment Follow-Up</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Coordination with Tanzanian doctors for follow-up care. Ongoing telemedicine access with treating specialists.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">💳</div>
+        <h4 class="font-semibold mb-2">Hospital Payment Assistance</h4>
+        <p class="text-white/60 text-sm leading-relaxed">We negotiate payment plans and liaise with insurance providers on your behalf.</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 hover:bg-white/15 transition-all">
+        <div class="text-3xl mb-4">🌐</div>
+        <h4 class="font-semibold mb-2">Interpretation Services</h4>
+        <p class="text-white/60 text-sm leading-relaxed">Swahili, English and local language support across all destination countries. Never lost in translation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="py-24 bg-sand">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk">Patient Stories</h2>
+      <p class="text-dusk/55 mt-3 text-lg">Real patients. Real outcomes.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-3xl">🇮🇳</span>
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">India — Apollo Chennai</span>
+        </div>
+        <div class="text-savanna text-4xl font-display mb-3 leading-none">"</div>
+        <p class="font-display text-xl italic text-dusk leading-relaxed mb-6">AfriMedTrip arranged everything within two weeks. From my diagnosis in Dar es Salaam to my cardiac surgery in Chennai — I didn't have to worry about a single thing.</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center font-bold text-orange-600">M</div>
+          <div>
+            <div class="font-semibold text-sm">Mr. Mwamba K.</div>
+            <div class="text-dusk/50 text-xs">Dar es Salaam · Cardiac patient</div>
+          </div>
+          <div class="ml-auto text-savanna text-sm">★★★★★</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-3xl">🇹🇷</span>
+          <span class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full">Turkey — Acibadem Istanbul</span>
+        </div>
+        <div class="text-savanna text-4xl font-display mb-3 leading-none">"</div>
+        <p class="font-display text-xl italic text-dusk leading-relaxed mb-6">My daughter needed a complex surgery that wasn't available in Tanzania. AfriMedTrip connected us with the best surgeon in Istanbul. She is fully recovered today.</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-600">F</div>
+          <div>
+            <div class="font-semibold text-sm">Mrs. Fatuma A.</div>
+            <div class="text-dusk/50 text-xs">Arusha · Paediatric surgery</div>
+          </div>
+          <div class="ml-auto text-savanna text-sm">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk">Frequently Asked Questions</h2>
+    </div>
+    <div class="space-y-3" id="faqList">
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-q w-full flex items-center justify-between px-6 py-5 text-left font-semibold text-sm" onclick="toggleFaq(this)">
+          <span>How much does AfriMedTrip's coordination service cost?</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-forest-light text-forest flex items-center justify-center text-xl shrink-0">+</span>
+        </button>
+        <div class="faq-body px-6 text-sm text-dusk/65 leading-relaxed"><div class="pb-5">Our coordination fee is charged separately from the hospital costs and varies based on destination and complexity. We offer a free initial consultation and will provide a full quote before you commit to anything. Many patients find the savings on hospital costs far outweigh our coordination fee.</div></div>
+      </div>
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-q w-full flex items-center justify-between px-6 py-5 text-left font-semibold text-sm" onclick="toggleFaq(this)">
+          <span>How long does it take to arrange medical travel?</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-forest-light text-forest flex items-center justify-center text-xl shrink-0">+</span>
+        </button>
+        <div class="faq-body px-6 text-sm text-dusk/65 leading-relaxed"><div class="pb-5">For most cases, we can arrange hospital appointments within 1–2 weeks and have patients travelling within 3–4 weeks of initial contact. Urgent or emergency cases can be expedited. The timeline depends on visa processing times for each country.</div></div>
+      </div>
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-q w-full flex items-center justify-between px-6 py-5 text-left font-semibold text-sm" onclick="toggleFaq(this)">
+          <span>Can my family member travel with me?</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-forest-light text-forest flex items-center justify-center text-xl shrink-0">+</span>
+        </button>
+        <div class="faq-body px-6 text-sm text-dusk/65 leading-relaxed"><div class="pb-5">Yes. We strongly recommend bringing one companion (spouse, parent, or sibling). We arrange their travel visa, flights, and accommodation alongside the patient. Additional companions can also be arranged at extra cost.</div></div>
+      </div>
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-q w-full flex items-center justify-between px-6 py-5 text-left font-semibold text-sm" onclick="toggleFaq(this)">
+          <span>Which destination is best for my condition?</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-forest-light text-forest flex items-center justify-center text-xl shrink-0">+</span>
+        </button>
+        <div class="faq-body px-6 text-sm text-dusk/65 leading-relaxed"><div class="pb-5">This depends on your diagnosis, budget, and urgency. India is best for affordability across most specialties. Turkey excels in cardiac and aesthetic procedures. The UK and USA/Canada are recommended for very complex cases, rare diseases, or when you want access to the very latest clinical trials. We will recommend the best fit during your free consultation.</div></div>
+      </div>
+      <div class="faq-item border border-gray-100 rounded-2xl overflow-hidden bg-white">
+        <button class="faq-q w-full flex items-center justify-between px-6 py-5 text-left font-semibold text-sm" onclick="toggleFaq(this)">
+          <span>Do you work with medical insurance providers?</span>
+          <span class="faq-icon w-8 h-8 rounded-full bg-forest-light text-forest flex items-center justify-center text-xl shrink-0">+</span>
+        </button>
+        <div class="faq-body px-6 text-sm text-dusk/65 leading-relaxed"><div class="pb-5">Yes. We work with major Tanzanian and international insurance providers and can liaise directly with your insurer on pre-authorisation and claims. Please let us know your insurer at the time of your first enquiry.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ENQUIRY FORM ═══ -->
+<section id="enquire" class="py-24 bg-sand">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-savanna-light text-savanna-dark text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Free Consultation</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk">Start Your Medical<br>Travel Journey</h2>
+      <p class="text-dusk/55 mt-4 text-lg">Complete this form and our medical travel coordinator will contact you within 24 hours — completely free, no obligation.</p>
+    </div>
+
+    <div id="enquiryFormWrap" class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-forest-light border-b border-forest/10 px-8 py-5">
+        <h3 class="font-display text-2xl font-bold text-forest">Medical Travel Enquiry</h3>
+        <p class="text-dusk/55 text-sm mt-1">All information is confidential and secure.</p>
+      </div>
+      <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div><label class="form-label">Full Name *</label><input class="form-input" type="text" id="eqName" placeholder="Your full name"/></div>
+        <div><label class="form-label">Phone / WhatsApp *</label><input class="form-input" type="tel" id="eqPhone" placeholder="+255 700 000 000"/></div>
+        <div class="md:col-span-2"><label class="form-label">Email Address *</label><input class="form-input" type="email" id="eqEmail" placeholder="your@email.com"/></div>
+        <div><label class="form-label">City in Tanzania *</label>
+          <select class="form-select" id="eqCity">
+            <option value="">Select your city…</option>
+            <option>Dar es Salaam</option><option>Arusha</option><option>Mwanza</option>
+            <option>Dodoma</option><option>Zanzibar</option><option>Moshi</option><option>Other</option>
+          </select>
+        </div>
+        <div><label class="form-label">Preferred Destination *</label>
+          <select class="form-select" id="eqDest">
+            <option value="">Select…</option>
+            <option>India</option><option>Turkey</option><option>United Kingdom</option>
+            <option>United States</option><option>Canada</option><option>Advise Me</option>
+          </select>
+        </div>
+        <div class="md:col-span-2"><label class="form-label">Medical Condition / Procedure Needed *</label>
+          <select class="form-select" id="eqCondition">
+            <option value="">Select specialty area…</option>
+            <option>Cardiology / Cardiac Surgery</option><option>Oncology / Cancer</option>
+            <option>Neurology / Neurosurgery</option><option>Organ Transplant</option>
+            <option>Orthopedics / Joint Replacement</option><option>Ophthalmology / Eye Surgery</option>
+            <option>Urology / Kidney</option><option>Fertility / IVF</option>
+            <option>Bariatric / Weight Loss</option><option>Pediatric Care</option>
+            <option>Dental / Oral Surgery</option><option>Rare Disease</option>
+            <option>Second Opinion</option><option>Other (describe below)</option>
+          </select>
+        </div>
+        <div><label class="form-label">Urgency *</label>
+          <select class="form-select" id="eqUrgency">
+            <option value="">Select…</option>
+            <option>Urgent (within 2–4 weeks)</option>
+            <option>Semi-urgent (1–2 months)</option>
+            <option>Planned (2–6 months)</option>
+            <option>Just exploring options</option>
+          </select>
+        </div>
+        <div><label class="form-label">Budget Range (USD)</label>
+          <select class="form-select" id="eqBudget">
+            <option value="">Select range…</option>
+            <option>Under $5,000</option><option>$5,000–$15,000</option>
+            <option>$15,000–$30,000</option><option>$30,000–$100,000</option>
+            <option>Above $100,000</option><option>Insurance covered</option>
+          </select>
+        </div>
+        <div class="md:col-span-2"><label class="form-label">Brief Description of Your Condition (optional)</label>
+          <textarea class="form-input" id="eqNotes" rows="3" placeholder="Describe your diagnosis, symptoms, or any reports you have. This helps us prepare before contacting you."></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="eqConsent" class="mt-1 w-4 h-4 accent-forest"/>
+            <span class="text-sm text-dusk/65">I consent to AfriMedTrip contacting me about my medical travel enquiry. All information is kept strictly confidential.</span>
+          </label>
+        </div>
+      </div>
+      <div class="px-8 pb-8">
+        <button onclick="submitEnquiry()" class="w-full bg-forest hover:bg-forest-mid text-white font-bold py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 text-base">
+          🌍 Submit Free Medical Travel Enquiry
+        </button>
+        <p class="text-center text-xs text-dusk/40 mt-3">No obligation. No payment. Our coordinator contacts you within 24 hours.</p>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="enquirySuccess" class="hidden bg-white rounded-3xl shadow-sm border border-gray-100 text-center py-16 px-8">
+      <div class="text-6xl mb-5">🌍</div>
+      <h3 class="font-display text-4xl font-bold text-forest mb-3">Enquiry Received!</h3>
+      <p class="text-dusk/65 text-lg mb-8 max-w-md mx-auto">Thank you. Our medical travel coordinator will review your enquiry and contact you within <strong>24 hours</strong>.</p>
+      <div class="bg-forest-light rounded-2xl p-5 max-w-sm mx-auto text-left text-sm mb-6">
+        <div class="font-semibold text-forest mb-3">In the meantime:</div>
+        <div class="space-y-2 text-dusk/65">
+          <div>✓ Gather any medical reports or scans</div>
+          <div>✓ Note any medications you're taking</div>
+          <div>✓ Think about who will travel with you</div>
+          <div>✓ Check your passport validity (6+ months)</div>
+        </div>
+      </div>
+      <a href="schedule.html" class="inline-flex items-center gap-2 bg-savanna text-white font-bold px-8 py-3 rounded-xl hover:bg-savanna-dark transition-all">Book a Zoom Call Too →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-dusk text-white/60 py-14 px-6">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-10 mb-10">
+    <div><div class="font-display text-2xl font-bold text-white mb-2">AfriMedTrip<span class="text-savanna">.com</span></div><p class="text-sm leading-relaxed">Clinical rotations, safari experiences & medical travel coordination — Tanzania, East Africa.</p></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Medical Travel</h4><ul class="space-y-2 text-sm"><li><a href="#destinations" class="hover:text-white transition-colors">Destinations</a></li><li><a href="#enquire" class="hover:text-white transition-colors">Free Enquiry</a></li><li><a href="schedule.html" class="hover:text-white transition-colors">Book Zoom Call</a></li></ul></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Rotations</h4><ul class="space-y-2 text-sm"><li><a href="rotations.html" class="hover:text-white transition-colors">Medical Rotations</a></li><li><a href="safari.html" class="hover:text-white transition-colors">Safari & Tours</a></li><li><a href="apply.html" class="hover:text-white transition-colors">Apply Now</a></li></ul></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Contact</h4><div class="space-y-2 text-sm"><p>info@afrimedtrip.com</p><p>WhatsApp: +255 700 000 000</p><p>Dar es Salaam, Tanzania</p></div></div>
+  </div>
+  <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 flex flex-wrap justify-between gap-3 text-xs">
+    <p>© 2026 AfriMedTrip.com — All rights reserved.</p>
+    <p>Medical Rotations · Safari · Medical Travel · Tanzania</p>
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/255700000000" target="_blank" class="wa-float" title="Chat on WhatsApp">
+  <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+</a>
+
+<script src="../js/main.js"></script>
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);} });
+}, {threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.slide-in').forEach(el => obs.observe(el));
+
+// FAQ accordion
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-body').classList.remove('open');});
+  if(!isOpen){item.classList.add('open');item.querySelector('.faq-body').classList.add('open');}
+}
+
+// Enquiry form
+function submitEnquiry(){
+  const required = ['eqName','eqPhone','eqEmail','eqCity','eqDest','eqCondition','eqUrgency'];
+  let ok = true;
+  required.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el||!el.value.trim()){el&&(el.style.borderColor='#C62828');ok=false;}
+    else el.style.borderColor='';
+  });
+  if(!document.getElementById('eqConsent').checked){alert('Please consent to being contacted.');return;}
+  if(!ok){
+    const t=document.createElement('div');
+    t.className='fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-2xl';
+    t.textContent='Please complete all required fields.';
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),400);},3000);
+    return;
+  }
+  // TODO: POST to /api/medical-travel/enquiry
+  const data={
+    name:document.getElementById('eqName').value,
+    phone:document.getElementById('eqPhone').value,
+    email:document.getElementById('eqEmail').value,
+    city:document.getElementById('eqCity').value,
+    destination:document.getElementById('eqDest').value,
+    condition:document.getElementById('eqCondition').value,
+    urgency:document.getElementById('eqUrgency').value,
+    budget:document.getElementById('eqBudget').value,
+    notes:document.getElementById('eqNotes').value,
+  };
+  console.log('Medical travel enquiry:', data);
+  document.getElementById('enquiryFormWrap').classList.add('hidden');
+  document.getElementById('enquirySuccess').classList.remove('hidden');
+  window.scrollTo({top:document.getElementById('enquirySuccess').offsetTop-80,behavior:'smooth'});
+}
+
+// Navbar
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  if(scrollY>40){nav.style.background='rgba(26,26,46,0.97)';nav.style.backdropFilter='blur(12px)';}
+  else{nav.style.background='transparent';}
+});
+document.getElementById('mobileMenuBtn')?.addEventListener('click',()=>{
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+  document.getElementById('mobileMenu').classList.toggle('flex');
+});
+</script>
+</body>
+</html>

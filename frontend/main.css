@@ -1,0 +1,204 @@
+/* AfriMedTrip — Main Stylesheet */
+
+/* ── Hero Background ── */
+.hero-bg {
+  background-image:
+    linear-gradient(to bottom right, rgba(28, 74, 42, 0.3), rgba(26, 26, 46, 0.1)),
+    url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+/* ── Safari Section ── */
+.safari-section-bg {
+  background-image: url('https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+/* ── Location Card Images ── */
+.arusha-bg {
+  background-image: linear-gradient(to bottom, rgba(28,74,42,0.2), rgba(28,74,42,0.6)),
+    url('https://images.unsplash.com/photo-1519659528534-7fd733a832a0?w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+.dar-bg {
+  background-image: linear-gradient(to bottom, rgba(26,26,46,0.2), rgba(26,26,46,0.6)),
+    url('https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+.zanzibar-bg {
+  background-image: linear-gradient(to bottom, rgba(93,64,55,0.2), rgba(93,64,55,0.6)),
+    url('https://images.unsplash.com/photo-1585577820756-6c4c1b86d873?w=800&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+/* ── Navbar Scroll Behaviour ── */
+#navbar {
+  background: transparent;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+#navbar.scrolled {
+  background: rgba(28, 74, 42, 0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+#navbar.light {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+#navbar.light .nav-logo-text { color: #1C4A2A; }
+#navbar.light .nav-link { color: #374151; }
+#navbar.light .nav-link:hover { color: #1C4A2A; }
+
+/* ── Animations ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Form Styles ── */
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.92rem;
+  color: #1A1A2E;
+  background: white;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus {
+  border-color: #2E7D32;
+  box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+}
+.form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin-bottom: 6px;
+}
+.form-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.92rem;
+  color: #1A1A2E;
+  background: white;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.form-select:focus { border-color: #2E7D32; }
+
+/* ── Pricing Cards ── */
+.pricing-card-recommended {
+  border: 2px solid #C8860A;
+  position: relative;
+}
+.pricing-card-recommended::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #C8860A;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ── Step connector line ── */
+.step-line {
+  position: absolute;
+  top: 28px;
+  left: calc(100% - 20px);
+  width: calc(100% - 20px);
+  height: 2px;
+  background: linear-gradient(to right, #C8860A40, transparent);
+}
+
+/* ── WhatsApp float button ── */
+.wa-float {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: 800;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.wa-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 32px rgba(37,211,102,0.55);
+}
+
+/* ── Page header (inner pages) ── */
+.page-header {
+  background: linear-gradient(135deg, #1C4A2A 0%, #2E7D32 60%, #1C4A2A 100%);
+  padding: 120px 0 64px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top right, rgba(200,134,10,0.15) 0%, transparent 60%);
+}
+
+/* ── Stripe payment mock ── */
+.stripe-card-element {
+  border: 1.5px solid #E0E0E0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: white;
+  transition: border-color 0.2s;
+}
+.stripe-card-element:focus-within { border-color: #2E7D32; }
+
+/* ── Scroll reveal ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile responsiveness tweaks */
+@media (max-width: 640px) {
+  .hero-bg { background-position: 60% center; }
+  .font-display { line-height: 1.1; }
+}

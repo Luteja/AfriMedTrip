@@ -1,1 +1,627 @@
-Welcome to my MedTrip
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AfriMedTrip — Medical Rotations, Safari & Medical Travel Tanzania</title>
+<meta name="description" content="AfriMedTrip.com — Structured clinical internships in Tanzania, Serengeti safari, and outbound medical travel to India, Turkey, UK, USA & Canada."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      savanna:'#C8860A','savanna-light':'#F5E6C8','savanna-dark':'#8B5E07',
+      forest:'#1C4A2A','forest-mid':'#2E7D32','forest-light':'#E8F5E9',
+      earth:'#5D4037',sand:'#FDF6E3',dusk:'#1A1A2E',
+    },
+    fontFamily: { display:['Cormorant Garamond','serif'], body:['Outfit','sans-serif'] }
+  }}
+}
+</script>
+<link rel="stylesheet" href="css/main.css"/>
+<style>
+/* ── HERO ── */
+.hero-bg {
+  background-image: linear-gradient(135deg,rgba(28,74,42,0.7) 0%,rgba(26,26,46,0.55) 60%,rgba(200,134,10,0.1) 100%),
+    url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80');
+  background-size:cover; background-position:center 30%;
+}
+/* ── GALLERY ── */
+.gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:220px 220px; gap:12px; }
+.gallery-item { border-radius:14px; overflow:hidden; position:relative; cursor:pointer; transition:transform 0.3s; }
+.gallery-item:hover { transform:scale(1.02); z-index:2; }
+.gallery-item:hover .gallery-overlay { opacity:1; }
+.gallery-item.tall { grid-row:span 2; }
+.gallery-item.wide { grid-column:span 2; }
+.gallery-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:flex-end; padding:14px; opacity:0; transition:opacity 0.3s; }
+.gallery-overlay span { color:white; font-size:0.82rem; font-weight:600; }
+.g1{background:linear-gradient(135deg,#1B5E20,#2E7D32)} .g2{background:linear-gradient(135deg,#33691E,#558B2F)}
+.g3{background:linear-gradient(135deg,#006064,#00838F)} .g4{background:linear-gradient(135deg,#C8860A,#FF9800)}
+.g5{background:linear-gradient(135deg,#4527A0,#1565C0)} .g6{background:linear-gradient(135deg,#37474F,#546E7A)}
+/* ── LIGHTBOX ── */
+.lightbox { position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s; }
+.lightbox.open { opacity:1;pointer-events:all; }
+/* ── AUTH MODAL ── */
+.auth-modal { position:fixed;inset:0;z-index:8000;background:rgba(10,20,10,0.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s; }
+.auth-modal.open { opacity:1;pointer-events:all; }
+.auth-box { background:white;border-radius:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;transform:translateY(20px);transition:transform 0.25s;box-shadow:0 24px 80px rgba(0,0,0,0.2); }
+.auth-modal.open .auth-box { transform:translateY(0); }
+.tab-btn { flex:1;padding:9px;border:none;background:none;border-radius:8px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.87rem;cursor:pointer;transition:all 0.2s;color:#6b7a7c; }
+.tab-btn.active { background:white;color:#1C4A2A;box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+/* ── LANG DROPDOWN ── */
+.lang-dropdown { position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid #E0E0E0;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.1);min-width:170px;z-index:2000;display:none;overflow:hidden; }
+.lang-dropdown.open { display:block; }
+.lang-option { display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:0.87rem;font-weight:500;cursor:pointer;transition:background 0.15s; }
+.lang-option:hover { background:#F1FAF1; }
+.lang-option.active { background:#E8F5E9;color:#1C4A2A;font-weight:700; }
+/* ── FORM ── */
+.form-input { width:100%;padding:11px 14px;border:1.5px solid #E0E0E0;border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s; }
+.form-input:focus { border-color:#1C4A2A; }
+.form-label { display:block;font-size:0.8rem;font-weight:600;margin-bottom:6px; }
+.form-select { width:100%;padding:11px 14px;border:1.5px solid #E0E0E0;border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;appearance:none;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center; }
+/* ── NAV scrolled ── */
+#navbar.scrolled { background:rgba(28,74,42,0.97)!important;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(0,0,0,0.15); }
+/* ── RTL ── */
+[dir="rtl"] .wa-float { right:auto;left:24px; }
+/* ── Reveal ── */
+[data-reveal] { opacity:0;transform:translateY(22px);transition:opacity 0.6s ease,transform 0.6s ease; }
+[data-reveal].revealed { opacity:1;transform:translateY(0); }
+</style>
+</head>
+<body class="font-body text-dusk overflow-x-hidden">
+
+<!-- ═══════════════════════════
+     AUTH MODAL
+═══════════════════════════ -->
+<div class="auth-modal" id="authModal" onclick="closeModalOutside(event,'authModal')">
+  <div class="auth-box">
+    <div class="flex items-start justify-between p-7 pb-0">
+      <div>
+        <div class="font-display text-2xl font-bold text-forest" data-i="auth.title">Welcome to AfriMedTrip</div>
+        <div class="text-dusk/50 text-sm mt-1" data-i="auth.sub">Sign in or create a free account</div>
+      </div>
+      <button onclick="closeModal('authModal')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors flex-shrink-0">✕</button>
+    </div>
+    <div class="p-7">
+      <div class="flex bg-gray-100 rounded-xl p-1 mb-6">
+        <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')" data-i="auth.login">Log In</button>
+        <button class="tab-btn" id="tabSignup" onclick="switchTab('signup')" data-i="auth.signup">Sign Up</button>
+      </div>
+      <!-- LOGIN -->
+      <div id="loginPane">
+        <div id="loginSuccess" class="hidden text-center py-6"><div class="text-5xl mb-3">✅</div><h3 class="font-display text-xl font-bold text-forest mb-2" data-i="auth.welcome">Welcome back!</h3><p class="text-dusk/60 text-sm" data-i="auth.loggedIn">You are now signed in to AfriMedTrip.</p></div>
+        <div id="loginForm">
+          <div class="mb-4"><label class="form-label" data-i="auth.email">Email Address</label><input class="form-input" type="email" id="liEmail" placeholder="you@email.com"/><span class="text-red-600 text-xs hidden mt-1 block" id="liEmailErr">Valid email required.</span></div>
+          <div class="mb-5"><label class="form-label" data-i="auth.password">Password</label><input class="form-input" type="password" id="liPass" placeholder="••••••••"/><span class="text-red-600 text-xs hidden mt-1 block" id="liPassErr">Password required.</span></div>
+          <button onclick="doLogin()" class="w-full bg-forest hover:bg-forest-mid text-white font-bold py-3.5 rounded-xl transition-all" data-i="auth.loginBtn">Sign In</button>
+          <p class="text-center text-sm text-dusk/50 mt-4"><a href="#" class="text-forest font-semibold" onclick="switchTab('signup')" data-i="auth.noAccount">No account? Sign up free →</a></p>
+        </div>
+      </div>
+      <!-- SIGNUP -->
+      <div id="signupPane" class="hidden">
+        <div id="signupSuccess" class="hidden text-center py-6"><div class="text-5xl mb-3">🎉</div><h3 class="font-display text-xl font-bold text-forest mb-2" data-i="auth.created">Account Created!</h3><p class="text-dusk/60 text-sm" data-i="auth.checkEmail">Welcome to AfriMedTrip. Check your email to verify.</p></div>
+        <div id="signupForm">
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div><label class="form-label" data-i="auth.firstName">First Name</label><input class="form-input" type="text" id="suFirst" placeholder="Anna"/></div>
+            <div><label class="form-label" data-i="auth.lastName">Last Name</label><input class="form-input" type="text" id="suLast" placeholder="Smith"/></div>
+          </div>
+          <div class="mb-4"><label class="form-label" data-i="auth.email">Email Address</label><input class="form-input" type="email" id="suEmail" placeholder="you@email.com"/></div>
+          <div class="mb-4"><label class="form-label" data-i="auth.password">Password</label><input class="form-input" type="password" id="suPass" placeholder="Min. 8 characters"/></div>
+          <div class="mb-5"><label class="form-label" data-i="auth.country">Country</label>
+            <select class="form-select" id="suCountry">
+              <option value="">Select…</option>
+              <option>United Kingdom</option><option>Germany</option><option>France</option><option>United States</option><option>Canada</option><option>Australia</option><option>Tanzania</option><option>Kenya</option><option>Nigeria</option><option>South Africa</option><option>Other</option>
+            </select>
+          </div>
+          <button onclick="doSignup()" class="w-full bg-forest hover:bg-forest-mid text-white font-bold py-3.5 rounded-xl transition-all" data-i="auth.signupBtn">Create Free Account</button>
+          <p class="text-center text-xs text-dusk/40 mt-3" data-i="auth.terms">By signing up you agree to AfriMedTrip's Terms & Privacy Policy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     LIGHTBOX
+═══════════════════════════ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="absolute top-6 right-8 text-white text-3xl opacity-70 hover:opacity-100 bg-transparent border-none cursor-pointer" onclick="closeLightbox()">✕</button>
+  <div class="text-center text-white p-8">
+    <div class="text-8xl mb-6" id="lbEmoji">🏥</div>
+    <div class="text-lg font-semibold opacity-80" id="lbCaption"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     NAVBAR
+═══════════════════════════ -->
+<nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300" style="background:transparent">
+  <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between gap-4">
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-2 shrink-0">
+      <div class="w-8 h-8 bg-savanna rounded-lg flex items-center justify-center"><span class="text-white font-display font-bold text-sm">A</span></div>
+      <span class="font-display font-bold text-xl text-white nav-logo-text">AfriMedTrip<span class="text-savanna">.com</span></span>
+    </a>
+    <!-- Desktop links -->
+    <div class="hidden lg:flex items-center gap-6">
+      <a href="pages/locations.html" class="text-xs font-semibold text-white/75 hover:text-white uppercase tracking-wider transition-colors" data-i="nav.rotations">Rotations</a>
+      <a href="pages/safari.html" class="text-xs font-semibold text-white/75 hover:text-white uppercase tracking-wider transition-colors" data-i="nav.safari">Safari</a>
+      <a href="pages/medical-travel.html" class="text-xs font-semibold text-white/75 hover:text-white uppercase tracking-wider transition-colors" data-i="nav.travel">Medical Travel</a>
+      <a href="pages/how-it-works.html" class="text-xs font-semibold text-white/75 hover:text-white uppercase tracking-wider transition-colors" data-i="nav.hiw">How It Works</a>
+    </div>
+    <!-- Right actions -->
+    <div class="flex items-center gap-2">
+      <!-- Language -->
+      <div class="relative" id="langWrap">
+        <button onclick="toggleLang()" class="flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition-all">
+          <span id="langFlag">🇬🇧</span><span id="langCode">EN</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="lang-dropdown" id="langDrop">
+          <div class="lang-option active" onclick="setLang('en')">🇬🇧 English</div>
+          <div class="lang-option" onclick="setLang('fr')">🇫🇷 Français</div>
+          <div class="lang-option" onclick="setLang('es')">🇪🇸 Español</div>
+          <div class="lang-option" onclick="setLang('de')">🇩🇪 Deutsch</div>
+          <div class="lang-option" onclick="setLang('sw')">🇹🇿 Kiswahili</div>
+          <div class="lang-option" onclick="setLang('ar')">🇸🇦 العربية</div>
+        </div>
+      </div>
+      <!-- Login / Avatar -->
+      <button id="loginBtn" onclick="openModal('authModal')" class="hidden lg:block text-xs font-bold text-white/80 hover:text-white border border-white/25 px-4 py-1.5 rounded-lg transition-all" data-i="nav.login">Log In</button>
+      <div id="userAvatar" class="hidden w-8 h-8 rounded-full bg-savanna text-white font-bold text-sm items-center justify-center cursor-pointer" onclick="userMenuToggle()"></div>
+      <!-- CTA -->
+      <a href="pages/apply.html" class="hidden md:block text-xs font-bold bg-savanna hover:bg-savanna-dark text-white px-4 py-2 rounded-lg transition-all" data-i="nav.apply">Apply Now</a>
+      <!-- Hamburger -->
+      <button id="hambBtn" class="lg:hidden text-white p-1.5" onclick="toggleMobile()">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="19" y2="6"/><line x1="3" y1="12" x2="19" y2="12"/><line x1="3" y1="18" x2="19" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile -->
+  <div id="mobMenu" class="hidden lg:hidden px-5 pb-5 pt-2 flex-col gap-1" style="background:rgba(28,74,42,0.98)">
+    <a href="pages/locations.html" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-medium" data-i="nav.rotations">Rotations</a>
+    <a href="pages/safari.html" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-medium" data-i="nav.safari">Safari & Tours</a>
+    <a href="pages/medical-travel.html" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-semibold text-savanna">🌍 Medical Travel Abroad</a>
+    <a href="pages/how-it-works.html" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-medium" data-i="nav.hiw">How It Works</a>
+    <a href="pages/schedule.html" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-medium">Schedule Zoom</a>
+    <a onclick="openModal('authModal')" class="py-2.5 border-b border-white/10 text-sm text-white/80 font-medium cursor-pointer" data-i="nav.login">Log In / Sign Up</a>
+    <a href="pages/apply.html" class="mt-2 text-center bg-savanna text-white font-bold py-3 rounded-xl text-sm" data-i="nav.apply">Apply Now</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════
+     HERO
+═══════════════════════════ -->
+<section class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-r from-dusk/75 via-dusk/40 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-dusk/50 via-transparent to-dusk/10"></div>
+  <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-savanna/8 rounded-full blur-3xl"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-16 w-full">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8" data-reveal>
+        <span class="w-2 h-2 bg-savanna rounded-full animate-pulse"></span>
+        <span class="text-white/90 text-xs font-bold tracking-widest uppercase" data-i="hero.eyebrow">Tanzania · East Africa · 2026 Cohorts Open</span>
+      </div>
+      <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.02] mb-6" data-reveal>
+        Where Medicine<br>
+        <em class="text-savanna not-italic">Meets</em> the Wild
+      </h1>
+      <p class="text-white/72 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl" data-reveal data-i="hero.sub">
+        Structured clinical internships in Tanzania's leading hospitals — paired with authentic safari and island experiences. Plus outbound medical travel coordination to India, Turkey, UK, USA & Canada.
+      </p>
+      <div class="flex flex-wrap gap-4 mb-14" data-reveal>
+        <a href="pages/apply.html" class="inline-flex items-center gap-2 bg-savanna hover:bg-savanna-dark text-white font-bold px-8 py-4 rounded-xl transition-all shadow-2xl hover:-translate-y-0.5 text-base" data-i="hero.apply">
+          Apply for Placement
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="pages/medical-travel.html" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm hover:bg-white/18 text-white font-semibold px-8 py-4 rounded-xl border border-white/25 transition-all text-base">
+          🌍 Medical Travel Abroad
+        </a>
+        <a href="pages/schedule.html" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm hover:bg-white/18 text-white font-semibold px-8 py-4 rounded-xl border border-white/25 transition-all text-base" data-i="hero.schedule">
+          📹 Free Zoom Call
+        </a>
+      </div>
+      <!-- Trust badges -->
+      <div class="flex flex-wrap gap-3" data-reveal>
+        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/15"><span class="text-xl">🏥</span><div><div class="text-white font-semibold text-xs" data-i="hero.badge1">Licensed Supervision</div><div class="text-white/50 text-xs">All rotations supervised</div></div></div>
+        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/15"><span class="text-xl">🦁</span><div><div class="text-white font-semibold text-xs" data-i="hero.badge2">Serengeti & Zanzibar</div><div class="text-white/50 text-xs">Optional safari add-ons</div></div></div>
+        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/15"><span class="text-xl">🌍</span><div><div class="text-white font-semibold text-xs">Medical Travel</div><div class="text-white/50 text-xs">India · Turkey · UK · USA · Canada</div></div></div>
+        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/15"><span class="text-xl">🎓</span><div><div class="text-white font-semibold text-xs" data-i="hero.badge3">Certificate Issued</div><div class="text-white/50 text-xs">Suitable for credit review</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/35 animate-bounce">
+    <span class="text-xs tracking-widest uppercase">Scroll</span>
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8M3 7l4 4 4-4"/></svg>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<div class="bg-forest text-white py-8">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+    <div><div class="font-display text-4xl font-bold text-savanna">3</div><div class="text-white/55 text-xs mt-1">Placement Cities</div></div>
+    <div><div class="font-display text-4xl font-bold text-savanna">12+</div><div class="text-white/55 text-xs mt-1">Specialties</div></div>
+    <div><div class="font-display text-4xl font-bold text-savanna">5</div><div class="text-white/55 text-xs mt-1">Travel Destinations</div></div>
+    <div><div class="font-display text-4xl font-bold text-savanna">2–12</div><div class="text-white/55 text-xs mt-1">Week Programs</div></div>
+    <div><div class="font-display text-4xl font-bold text-savanna">24/7</div><div class="text-white/55 text-xs mt-1">On-Ground Support</div></div>
+  </div>
+</div>
+
+<!-- ═══ POSITIONING — WHAT WE ARE ═══ -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div data-reveal>
+        <span class="inline-block bg-forest-light text-forest text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-6">AfriMedTrip Positioned As</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk mb-6 leading-tight">More Than a<br><em class="text-forest">Placement Programme.</em></h2>
+        <p class="text-dusk/65 text-lg leading-relaxed mb-8">AfriMedTrip is a globally accessible clinical internship and medical travel platform built for the next generation of healthcare professionals — and for patients who need the world's best care.</p>
+        <div class="space-y-3">
+          <div class="flex items-start gap-3 p-4 bg-forest-light rounded-2xl"><span class="text-forest font-bold text-lg shrink-0">✔</span><div><div class="font-semibold text-sm">Structured Clinical Internship Platform</div><div class="text-dusk/60 text-xs mt-0.5">Documented, supervised rotations inside Tanzanian hospitals</div></div></div>
+          <div class="flex items-start gap-3 p-4 bg-forest-light rounded-2xl"><span class="text-forest font-bold text-lg shrink-0">✔</span><div><div class="font-semibold text-sm">Research Expansion (Pending NIMR Approval)</div><div class="text-dusk/60 text-xs mt-0.5">Clinical & public health research tracks — joining the waitlist now</div></div></div>
+          <div class="flex items-start gap-3 p-4 bg-forest-light rounded-2xl"><span class="text-forest font-bold text-lg shrink-0">✔</span><div><div class="font-semibold text-sm">Career Mentorship Pathway</div><div class="text-dusk/60 text-xs mt-0.5">Medical school admissions guidance, personal statement advisory & more</div></div></div>
+          <div class="flex items-start gap-3 p-4 bg-forest-light rounded-2xl"><span class="text-forest font-bold text-lg shrink-0">✔</span><div><div class="font-semibold text-sm">Safe & Professionally Supervised</div><div class="text-dusk/60 text-xs mt-0.5">Licensed Tanzanian physicians. 24/7 local coordinator. Basic insurance included.</div></div></div>
+          <div class="flex items-start gap-3 p-4 bg-savanna-light rounded-2xl border border-savanna/20"><span class="text-savanna font-bold text-lg shrink-0">✔</span><div><div class="font-semibold text-sm text-savanna-dark">Globally Accessible</div><div class="text-dusk/60 text-xs mt-0.5">For medical interns, students, pre-med, nursing students, residents & outbound patients</div></div></div>
+        </div>
+      </div>
+      <!-- Who is it for -->
+      <div data-reveal>
+        <h3 class="font-display text-3xl font-bold text-dusk mb-6">Who Is AfriMedTrip For?</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-sand rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all">
+            <div class="text-3xl mb-3">🧑‍⚕️</div>
+            <div class="font-semibold text-sm mb-1">Medical Interns</div>
+            <div class="text-dusk/55 text-xs">Junior doctors & interns seeking global clinical exposure</div>
+          </div>
+          <div class="bg-sand rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all">
+            <div class="text-3xl mb-3">🎓</div>
+            <div class="font-semibold text-sm mb-1">Medical Students</div>
+            <div class="text-dusk/55 text-xs">Year 1–5 medical electives & observership rotations</div>
+          </div>
+          <div class="bg-sand rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all">
+            <div class="text-3xl mb-3">📚</div>
+            <div class="font-semibold text-sm mb-1">Pre-Med Students</div>
+            <div class="text-dusk/55 text-xs">Shadowing & clinical observership to strengthen applications</div>
+          </div>
+          <div class="bg-sand rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all">
+            <div class="text-3xl mb-3">💉</div>
+            <div class="font-semibold text-sm mb-1">Nursing Students</div>
+            <div class="text-dusk/55 text-xs">Clinical placements in wards, community & public health</div>
+          </div>
+          <div class="bg-sand rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all">
+            <div class="text-3xl mb-3">🔬</div>
+            <div class="font-semibold text-sm mb-1">Residents</div>
+            <div class="text-dusk/55 text-xs">Post-graduate resident doctors seeking specialised exposure</div>
+          </div>
+          <div class="bg-savanna-light rounded-2xl p-5 border border-savanna/20 hover:border-savanna transition-all">
+            <div class="text-3xl mb-3">🌍</div>
+            <div class="font-semibold text-sm mb-1 text-savanna-dark">Tanzanian Patients</div>
+            <div class="text-dusk/55 text-xs">Outbound medical travel to India, Turkey, UK, USA & Canada</div>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="pages/apply.html" class="inline-flex items-center gap-2 bg-forest text-white font-bold px-6 py-3 rounded-xl text-sm hover:bg-forest-mid transition-all">Apply for Rotation →</a>
+          <a href="pages/medical-travel.html" class="inline-flex items-center gap-2 border-2 border-savanna text-savanna-dark font-bold px-6 py-3 rounded-xl text-sm hover:bg-savanna hover:text-white transition-all">Medical Travel →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SPECIALTIES ═══ -->
+<section class="py-24 bg-sand">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-14" data-reveal>
+      <span class="inline-block bg-forest-light text-forest text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Clinical Experience</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk mb-4" data-i="clinical.title">Serious Medicine. Real Exposure.</h2>
+      <p class="text-dusk/60 max-w-xl mx-auto text-lg" data-i="clinical.body">Supervised placements inside active Tanzanian hospitals. Structured, documented, and suitable for academic credit review.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🫀</div><div class="font-semibold text-sm" data-i="spec.1">Internal Medicine</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">👶</div><div class="font-semibold text-sm" data-i="spec.2">Pediatrics</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🔬</div><div class="font-semibold text-sm" data-i="spec.3">Surgery</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🤱</div><div class="font-semibold text-sm" data-i="spec.4">Obstetrics & Gynecology</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🚑</div><div class="font-semibold text-sm" data-i="spec.5">Emergency Medicine</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🫀</div><div class="font-semibold text-sm">Cardiology</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🩺</div><div class="font-semibold text-sm">Nephrology</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🧠</div><div class="font-semibold text-sm">Neurology</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🦴</div><div class="font-semibold text-sm">Urology</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🧬</div><div class="font-semibold text-sm" data-i="spec.6">Infectious Diseases</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🧠</div><div class="font-semibold text-sm">Neurosurgery</div></div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:border-forest hover:bg-forest-light transition-all hover:-translate-y-1 cursor-default" data-reveal><div class="text-3xl mb-3">🌍</div><div class="font-semibold text-sm" data-i="spec.7">Community & Public Health</div></div>
+    </div>
+    <p class="text-center text-dusk/50 text-sm" data-reveal data-i="clinical.note">All placements supervised by licensed Tanzanian physicians. Certificate issued on completion.</p>
+    <div class="text-center mt-8" data-reveal>
+      <a href="pages/rotations.html" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-mid text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg">View Full Rotation Details →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DESTINATIONS ═══ -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-14" data-reveal>
+      <span class="inline-block bg-savanna-light text-savanna-dark text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4" data-i="dest.label">Discover Our Placement Destinations</span>
+      <h2 class="font-display text-4xl md:text-6xl font-bold text-dusk" data-i="dest.title">Three Worlds. One Journey.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <a href="pages/locations.html#arusha" class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="h-52 arusha-bg relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-t from-forest/80 to-transparent"></div><div class="absolute bottom-4 left-5"><span class="text-white/70 text-xs font-bold uppercase tracking-widest">Northern Tanzania</span><h3 class="font-display text-3xl font-bold text-white">Arusha</h3></div><div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-bold">Safari Hub</div></div>
+        <div class="p-6"><p class="text-dusk/60 text-sm leading-relaxed mb-4">Gateway to Serengeti & Ngorongoro. Busy referral hospitals with NGO exposure. Multi-day safari integration.</p><div class="flex items-center gap-2 text-savanna font-semibold text-sm group-hover:gap-3 transition-all">Explore Arusha <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h6M8 9l3 3-3 3"/></svg></div></div>
+      </a>
+      <a href="pages/locations.html#dar" class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 md:mt-8">
+        <div class="h-52 dar-bg relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-t from-dusk/80 to-transparent"></div><div class="absolute bottom-4 left-5"><span class="text-white/70 text-xs font-bold uppercase tracking-widest">Coastal Tanzania</span><h3 class="font-display text-3xl font-bold text-white">Dar es Salaam</h3></div><div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-bold">Urban Medicine</div></div>
+        <div class="p-6"><p class="text-dusk/60 text-sm leading-relaxed mb-4">Tanzania's largest city. Urban tertiary hospitals, coastal atmosphere, optional Zanzibar extension.</p><div class="flex items-center gap-2 text-savanna font-semibold text-sm group-hover:gap-3 transition-all">Explore Dar es Salaam <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h6M8 9l3 3-3 3"/></svg></div></div>
+      </a>
+      <a href="pages/locations.html#zanzibar" class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="h-52 zanzibar-bg relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-t from-earth/80 to-transparent"></div><div class="absolute bottom-4 left-5"><span class="text-white/70 text-xs font-bold uppercase tracking-widest">Island Tanzania</span><h3 class="font-display text-3xl font-bold text-white">Zanzibar</h3></div><div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-bold">Island Life</div></div>
+        <div class="p-6"><p class="text-dusk/60 text-sm leading-relaxed mb-4">Spice island. Community health rotations, turquoise waters, UNESCO Stone Town heritage.</p><div class="flex items-center gap-2 text-savanna font-semibold text-sm group-hover:gap-3 transition-all">Explore Zanzibar <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h6M8 9l3 3-3 3"/></svg></div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MEDICAL TRAVEL BANNER ═══ -->
+<section class="py-20 relative overflow-hidden" style="background:linear-gradient(135deg,#1565C0 0%,#1C4A2A 100%)">
+  <div class="absolute inset-0" style="background:radial-gradient(ellipse at top right,rgba(200,134,10,0.2),transparent 60%)"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-block bg-white/15 border border-white/20 rounded-full px-4 py-1.5 text-xs font-bold text-white tracking-widest uppercase mb-6">New Service</span>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">Medical Travel<br><em class="text-savanna">For Tanzanian Patients</em></h2>
+        <p class="text-white/70 text-lg leading-relaxed mb-8">We coordinate advanced medical treatment abroad for Tanzanian patients — from hospital appointment and visa to flights, accommodation and return home.</p>
+        <div class="flex flex-wrap gap-3 mb-8">
+          <span class="bg-white/15 border border-white/20 text-white text-sm px-4 py-2 rounded-xl font-medium">🇮🇳 India</span>
+          <span class="bg-white/15 border border-white/20 text-white text-sm px-4 py-2 rounded-xl font-medium">🇹🇷 Turkey</span>
+          <span class="bg-white/15 border border-white/20 text-white text-sm px-4 py-2 rounded-xl font-medium">🇬🇧 United Kingdom</span>
+          <span class="bg-white/15 border border-white/20 text-white text-sm px-4 py-2 rounded-xl font-medium">🇺🇸 USA</span>
+          <span class="bg-white/15 border border-white/20 text-white text-sm px-4 py-2 rounded-xl font-medium">🇨🇦 Canada</span>
+        </div>
+        <a href="pages/medical-travel.html" class="inline-flex items-center gap-2 bg-savanna hover:bg-savanna-dark text-white font-bold px-8 py-4 rounded-xl transition-all shadow-xl">Learn More & Enquire →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5"><div class="text-3xl mb-3">💰</div><div class="text-white font-bold text-sm mb-1">Up to 80% Savings</div><div class="text-white/55 text-xs">vs Western treatment costs</div></div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5"><div class="text-3xl mb-3">🏥</div><div class="text-white font-bold text-sm mb-1">50+ Partner Hospitals</div><div class="text-white/55 text-xs">JCI-accredited institutions</div></div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5"><div class="text-3xl mb-3">🛂</div><div class="text-white font-bold text-sm mb-1">Visa Assistance</div><div class="text-white/55 text-xs">Medical visa support included</div></div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-5"><div class="text-3xl mb-3">👩‍⚕️</div><div class="text-white font-bold text-sm mb-1">Dedicated Case Manager</div><div class="text-white/55 text-xs">24/7 support throughout</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PHOTO GALLERY ═══ -->
+<section class="py-24 bg-dusk" id="gallery">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-12" data-reveal>
+      <span class="inline-block bg-white/10 text-white/80 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">Gallery</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-white">Life on Placement</h2>
+      <p class="text-white/50 mt-3 text-lg">Click any image to expand</p>
+    </div>
+    <div class="gallery-grid" data-reveal>
+      <div class="gallery-item tall" onclick="openLightbox('🏥','Hospital Ward Rounds — Mwanza Regional Referral Hospital')">
+        <div class="g1 w-full h-full flex items-center justify-center text-6xl">🏥</div>
+        <div class="gallery-overlay"><span>Hospital Rounds — Mwanza</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('🦁','Serengeti Day Trip — Optional Safari Extension')">
+        <div class="g2 w-full h-full flex items-center justify-center text-5xl">🦁</div>
+        <div class="gallery-overlay"><span>Serengeti Safari</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('👩‍⚕️','Clinical Supervision — Morning Ward Consultations')">
+        <div class="g4 w-full h-full flex items-center justify-center text-5xl">👩‍⚕️</div>
+        <div class="gallery-overlay"><span>Clinical Supervision</span></div>
+      </div>
+      <div class="gallery-item wide" onclick="openLightbox('🌊','Lake Victoria — Mwanza Lakeside Experience')">
+        <div class="g3 w-full h-full flex items-center justify-center text-6xl">🌊</div>
+        <div class="gallery-overlay"><span>Lake Victoria, Mwanza</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('🏝️','Zanzibar Extension — Coastal Medicine & Island Life')">
+        <div class="g5 w-full h-full flex items-center justify-center text-5xl">🏝️</div>
+        <div class="gallery-overlay"><span>Zanzibar Extension</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox('🎓','Certificate Ceremony — Completion & Celebration')">
+        <div class="g6 w-full h-full flex items-center justify-center text-5xl">🎓</div>
+        <div class="gallery-overlay"><span>Certificate Ceremony</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="py-24 bg-sand">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-14" data-reveal>
+      <h2 class="font-display text-4xl md:text-5xl font-bold text-dusk" data-i="test.title">Voices from the Field</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1" data-reveal>
+        <div class="text-savanna text-5xl font-display mb-4 leading-none">"</div>
+        <p class="font-display text-xl italic text-dusk leading-relaxed mb-6" data-i="test.1">The most impactful clinical exposure of my training. Working inside a Tanzanian hospital gave me perspectives you simply cannot get anywhere else.</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-forest flex items-center justify-center text-white font-bold">A</div>
+          <div><div class="font-semibold text-sm">Anna K.</div><div class="text-dusk/50 text-xs">Medical Student, Germany</div></div>
+          <div class="ml-auto text-savanna text-sm">★★★★★</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-1" data-reveal>
+        <div class="text-savanna text-5xl font-display mb-4 leading-none">"</div>
+        <p class="font-display text-xl italic text-dusk leading-relaxed mb-6" data-i="test.2">Structured, safe, and professionally organised from start to finish. The Serengeti extension after my rotation was absolutely unforgettable.</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-savanna flex items-center justify-center text-white font-bold">D</div>
+          <div><div class="font-semibold text-sm">David M.</div><div class="text-dusk/50 text-xs">Junior Doctor, United Kingdom</div></div>
+          <div class="ml-auto text-savanna text-sm">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<section class="py-20" style="background:linear-gradient(135deg,#1B5E20,#2E7D32,#388E3C)">
+  <div class="max-w-xl mx-auto px-6 text-center" data-reveal>
+    <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4" data-i="nl.title">Stay Updated on 2026 Cohorts</h2>
+    <p class="text-white/70 text-lg mb-8" data-i="nl.body">Placement openings, safari deals, scholarship news & AfriMedTrip updates — direct to your inbox.</p>
+    <div id="nlFormWrap" class="flex max-w-md mx-auto shadow-2xl rounded-xl overflow-hidden mb-4">
+      <input type="email" id="nlEmail" class="flex-1 px-5 py-4 text-sm outline-none font-body" data-i-placeholder="nl.placeholder" placeholder="your@email.com"/>
+      <button onclick="subscribeNL()" class="bg-savanna hover:bg-savanna-dark text-white font-bold px-6 py-4 transition-all whitespace-nowrap text-sm" data-i="nl.btn">Subscribe</button>
+    </div>
+    <div id="nlSuccess" class="hidden bg-white/15 text-white text-sm font-semibold px-6 py-3 rounded-xl mb-4" data-i="nl.success">🎉 You're subscribed! Welcome to the AfriMedTrip community.</div>
+    <p class="text-white/45 text-xs" data-i="nl.note">No spam. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="py-24 bg-forest relative overflow-hidden">
+  <div class="absolute inset-0" style="background:radial-gradient(ellipse at top,rgba(255,255,255,0.07),transparent 60%),radial-gradient(ellipse at bottom right,rgba(200,134,10,0.15),transparent 50%)"></div>
+  <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+    <h2 class="font-display text-5xl md:text-7xl font-bold text-white mb-6" data-i="cta.title">Begin Your Journey.</h2>
+    <p class="text-white/65 text-xl leading-relaxed mb-10" data-i="cta.body">Clinical training, safari, and medical travel — all coordinated by AfriMedTrip.</p>
+    <div class="flex flex-wrap gap-4 justify-center mb-6">
+      <a href="pages/apply.html" class="inline-flex items-center gap-2 bg-savanna hover:bg-savanna-dark text-white font-bold px-10 py-5 rounded-xl transition-all shadow-2xl text-lg hover:-translate-y-0.5" data-i="cta.apply">Apply Now — 2026</a>
+      <a href="pages/medical-travel.html" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/18 text-white font-semibold px-10 py-5 rounded-xl border border-white/25 transition-all text-lg">🌍 Medical Travel</a>
+    </div>
+    <p class="text-white/35 text-sm" data-i="cta.sub">$200 deposit secures your placement after approval. No upfront payment to apply.</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="bg-dusk/95 text-white/55 py-14 px-6">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-5 gap-10 mb-10">
+    <div class="md:col-span-2"><div class="font-display text-2xl font-bold text-white mb-3">AfriMedTrip<span class="text-savanna">.com</span></div><p class="text-sm leading-relaxed max-w-64">Clinical rotations, safari experiences & medical travel coordination — Tanzania, East Africa.</p></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Rotations</h4><ul class="space-y-2 text-sm"><li><a href="pages/rotations.html" class="hover:text-white transition-colors">Medical Rotations</a></li><li><a href="pages/safari.html" class="hover:text-white transition-colors">Safari Packages</a></li><li><a href="pages/locations.html" class="hover:text-white transition-colors">Destinations</a></li><li><a href="pages/apply.html" class="hover:text-white transition-colors">Apply Now</a></li></ul></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Medical Travel</h4><ul class="space-y-2 text-sm"><li><a href="pages/medical-travel.html#destinations" class="hover:text-white transition-colors">India</a></li><li><a href="pages/medical-travel.html#destinations" class="hover:text-white transition-colors">Turkey</a></li><li><a href="pages/medical-travel.html#destinations" class="hover:text-white transition-colors">UK / USA / Canada</a></li><li><a href="pages/medical-travel.html#enquire" class="hover:text-white transition-colors">Free Enquiry</a></li></ul></div>
+    <div><h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Contact</h4><div class="space-y-2 text-sm"><p>info@afrimedtrip.com</p><p>+255 700 000 000</p><p>Dar es Salaam, Tanzania</p><a href="pages/schedule.html" class="hover:text-white transition-colors">Schedule Zoom Call</a></div></div>
+  </div>
+  <div class="max-w-7xl mx-auto border-t border-white/8 pt-6 flex flex-wrap justify-between gap-3 text-xs">
+    <p>© 2026 AfriMedTrip.com — All rights reserved.</p>
+    <p>Medical Rotations · Safari · Medical Travel · Tanzania, East Africa</p>
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/255700000000" target="_blank" class="wa-float" title="Chat on WhatsApp">
+  <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+</a>
+
+<!-- Sticky mobile CTA -->
+<div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-gray-100 px-4 py-3 shadow-2xl">
+  <a href="pages/apply.html" class="block text-center bg-savanna text-white font-bold py-3 rounded-xl text-sm">📋 Apply for Placement</a>
+</div>
+
+<script>
+/* ═══════════ i18n ═══════════ */
+const T = {
+  en:{"nav.rotations":"Rotations","nav.safari":"Safari","nav.travel":"Medical Travel","nav.hiw":"How It Works","nav.login":"Log In","nav.apply":"Apply Now","hero.eyebrow":"Tanzania · East Africa · 2026 Cohorts Open","hero.sub":"Structured clinical internships in Tanzania's leading hospitals — paired with authentic safari and island experiences. Plus outbound medical travel to India, Turkey, UK, USA & Canada.","hero.apply":"Apply for Placement","hero.schedule":"Free Zoom Call","hero.badge1":"Licensed Supervision","hero.badge2":"Serengeti & Zanzibar","hero.badge3":"Certificate Issued","clinical.title":"Serious Medicine. Real Exposure.","clinical.body":"Supervised placements inside active Tanzanian hospitals. Structured, documented, and suitable for academic credit review.","clinical.note":"All placements supervised by licensed Tanzanian physicians. Certificate issued on completion.","spec.1":"Internal Medicine","spec.2":"Pediatrics","spec.3":"Surgery","spec.4":"Obstetrics & Gynecology","spec.5":"Emergency Medicine","spec.6":"Infectious Diseases","spec.7":"Community & Public Health","dest.label":"Discover Our Placement Destinations","dest.title":"Three Worlds. One Journey.","test.title":"Voices from the Field","test.1":"The most impactful clinical exposure of my training. Working inside a Tanzanian hospital gave me perspectives you simply cannot get anywhere else.","test.2":"Structured, safe, and professionally organised from start to finish. The Serengeti extension after my rotation was absolutely unforgettable.","nl.title":"Stay Updated on 2026 Cohorts","nl.body":"Placement openings, safari deals, scholarship news & AfriMedTrip updates — direct to your inbox.","nl.btn":"Subscribe","nl.note":"No spam. Unsubscribe anytime.","nl.placeholder":"your@email.com","nl.success":"🎉 You're subscribed! Welcome to AfriMedTrip.","cta.title":"Begin Your Journey.","cta.body":"Clinical training, safari, and medical travel — all coordinated by AfriMedTrip.","cta.apply":"Apply Now — 2026","cta.sub":"$200 deposit secures placement after approval. No payment to apply.","auth.title":"Welcome to AfriMedTrip","auth.sub":"Sign in or create a free account","auth.login":"Log In","auth.signup":"Sign Up","auth.email":"Email Address","auth.password":"Password","auth.country":"Country","auth.firstName":"First Name","auth.lastName":"Last Name","auth.loginBtn":"Sign In","auth.signupBtn":"Create Free Account","auth.noAccount":"No account? Sign up free →","auth.terms":"By signing up you agree to AfriMedTrip's Terms & Privacy Policy.","auth.welcome":"Welcome back!","auth.loggedIn":"You are now signed in to AfriMedTrip.","auth.created":"Account Created!","auth.checkEmail":"Welcome to AfriMedTrip. Check your email to verify."},
+  fr:{"nav.rotations":"Clinique","nav.safari":"Safari","nav.travel":"Voyage Médical","nav.hiw":"Comment ça marche","nav.login":"Connexion","nav.apply":"Postuler","hero.eyebrow":"Tanzanie · Afrique de l'Est · Cohortes 2026","hero.sub":"Stages cliniques supervisés en Tanzanie — avec immersion culturelle et extensions Serengeti ou Zanzibar. Voyage médical vers l'Inde, Turquie, UK, USA et Canada.","hero.apply":"Postuler","hero.schedule":"Appel Gratuit","hero.badge1":"Supervision Médicale","hero.badge2":"Serengeti & Zanzibar","hero.badge3":"Certificat Délivré","clinical.title":"Médecine Sérieuse. Exposition Réelle.","clinical.body":"Placements supervisés dans des hôpitaux tanzaniens actifs. Structurés et documentés.","clinical.note":"Tous les placements supervisés par des médecins tanzaniens agréés.","dest.label":"Découvrez Nos Destinations","dest.title":"Trois Mondes. Un Voyage.","test.title":"Voix du Terrain","test.1":"L'exposition clinique la plus impactante de ma formation.","test.2":"Structuré, sûr et professionnellement organisé du début à la fin.","nl.title":"Restez Informé des Cohortes 2026","nl.body":"Ouvertures de placement, offres safari et actualités AfriMedTrip.","nl.btn":"S'abonner","nl.note":"Pas de spam. Désinscription à tout moment.","nl.placeholder":"votre@email.com","nl.success":"🎉 Vous êtes abonné(e)!","cta.title":"Commencez Votre Voyage.","cta.body":"Formation clinique, safari et voyage médical — tout coordonné par AfriMedTrip.","cta.apply":"Postuler — 2026","cta.sub":"Dépôt de 200$ après approbation. Candidature gratuite.","auth.title":"Bienvenue sur AfriMedTrip","auth.sub":"Connectez-vous ou créez un compte gratuit","auth.login":"Connexion","auth.signup":"Inscription","auth.email":"Adresse Email","auth.password":"Mot de passe","auth.country":"Pays","auth.firstName":"Prénom","auth.lastName":"Nom","auth.loginBtn":"Se Connecter","auth.signupBtn":"Créer un Compte","auth.noAccount":"Pas de compte? Inscrivez-vous →","auth.terms":"En vous inscrivant vous acceptez nos Conditions.","auth.welcome":"Bon retour!","auth.loggedIn":"Vous êtes connecté(e).","auth.created":"Compte créé!","auth.checkEmail":"Vérifiez votre email.","spec.1":"Médecine Interne","spec.2":"Pédiatrie","spec.3":"Chirurgie","spec.4":"Obstétrique & Gynécologie","spec.5":"Médecine d'Urgence","spec.6":"Maladies Infectieuses","spec.7":"Santé Communautaire"},
+  es:{"nav.rotations":"Rotaciones","nav.safari":"Safari","nav.travel":"Turismo Médico","nav.hiw":"Cómo Funciona","nav.login":"Iniciar Sesión","nav.apply":"Solicitar","hero.eyebrow":"Tanzania · África Oriental · Cohortes 2026","hero.sub":"Prácticas clínicas supervisadas en Tanzania — con safari y turismo médico a India, Turquía, Reino Unido, EEUU y Canadá.","hero.apply":"Solicitar Plaza","hero.schedule":"Llamada Gratuita","hero.badge1":"Supervisión Médica","hero.badge2":"Serengeti & Zanzíbar","hero.badge3":"Certificado Emitido","clinical.title":"Medicina Seria. Exposición Real.","clinical.body":"Colocaciones supervisadas en hospitales tanzanos activos.","clinical.note":"Todas las colocaciones supervisadas por médicos tanzanos con licencia.","dest.label":"Descubre Nuestros Destinos","dest.title":"Tres Mundos. Un Viaje.","test.title":"Voces del Campo","test.1":"La exposición clínica más impactante de mi formación.","test.2":"Estructurado, seguro y profesionalmente organizado.","nl.title":"Mantente al Día con las Cohortes 2026","nl.btn":"Suscribirse","nl.note":"Sin spam. Cancelar en cualquier momento.","nl.placeholder":"tu@email.com","nl.success":"🎉 ¡Estás suscrito!","cta.title":"Comienza Tu Viaje.","cta.body":"Formación clínica, safari y turismo médico — coordinado por AfriMedTrip.","cta.apply":"Solicitar — 2026","cta.sub":"Depósito $200 tras aprobación.","auth.title":"Bienvenido a AfriMedTrip","auth.sub":"Inicia sesión o crea una cuenta","auth.login":"Iniciar Sesión","auth.signup":"Registrarse","auth.email":"Correo Electrónico","auth.password":"Contraseña","auth.country":"País","auth.firstName":"Nombre","auth.lastName":"Apellido","auth.loginBtn":"Iniciar Sesión","auth.signupBtn":"Crear Cuenta Gratuita","auth.noAccount":"¿Sin cuenta? Regístrate →","auth.terms":"Al registrarte aceptas nuestros Términos.","auth.welcome":"¡Bienvenido de vuelta!","auth.loggedIn":"Has iniciado sesión.","auth.created":"¡Cuenta Creada!","auth.checkEmail":"Revisa tu email.","spec.1":"Medicina Interna","spec.2":"Pediatría","spec.3":"Cirugía","spec.4":"Obstetricia y Ginecología","spec.5":"Medicina de Urgencias","spec.6":"Enfermedades Infecciosas","spec.7":"Salud Comunitaria"},
+  de:{"nav.rotations":"Klinisch","nav.safari":"Safari","nav.travel":"Medizintourismus","nav.hiw":"So Funktioniert Es","nav.login":"Anmelden","nav.apply":"Bewerben","hero.eyebrow":"Tansania · Ostafrika · 2026 Jahrgänge","hero.sub":"Betreute klinische Praktika in Tansania — mit Safari und Medizintourismus nach Indien, Türkei, UK, USA und Kanada.","hero.apply":"Platz Beantragen","hero.schedule":"Kostenloser Anruf","hero.badge1":"Medizinische Aufsicht","hero.badge2":"Serengeti & Sansibar","hero.badge3":"Zertifikat Ausgestellt","clinical.title":"Ernsthafte Medizin. Echte Exposition.","clinical.body":"Betreute Platzierungen in aktiven tansanischen Krankenhäusern.","clinical.note":"Alle Platzierungen von zugelassenen tansanischen Ärzten überwacht.","dest.label":"Entdecken Sie Unsere Ziele","dest.title":"Drei Welten. Eine Reise.","test.title":"Stimmen aus dem Feld","test.1":"Die wirkungsvollste klinische Erfahrung meiner Ausbildung.","test.2":"Strukturiert, sicher und professionell organisiert.","nl.title":"Bleiben Sie über 2026 Jahrgänge Informiert","nl.btn":"Abonnieren","nl.note":"Kein Spam. Jederzeit abmelden.","nl.placeholder":"ihre@email.com","nl.success":"🎉 Sie sind angemeldet!","cta.title":"Beginnen Sie Ihre Reise.","cta.body":"Klinische Ausbildung, Safari und Medizintourismus — von AfriMedTrip koordiniert.","cta.apply":"Bewerben — 2026","cta.sub":"$200 Anzahlung nach Genehmigung. Bewerbung kostenlos.","auth.title":"Willkommen bei AfriMedTrip","auth.sub":"Anmelden oder kostenloses Konto erstellen","auth.login":"Anmelden","auth.signup":"Registrieren","auth.email":"E-Mail-Adresse","auth.password":"Passwort","auth.country":"Land","auth.firstName":"Vorname","auth.lastName":"Nachname","auth.loginBtn":"Anmelden","auth.signupBtn":"Kostenloses Konto Erstellen","auth.noAccount":"Kein Konto? Registrieren →","auth.terms":"Mit der Anmeldung stimmen Sie unseren AGB zu.","auth.welcome":"Willkommen zurück!","auth.loggedIn":"Sie sind angemeldet.","auth.created":"Konto Erstellt!","auth.checkEmail":"Überprüfen Sie Ihre E-Mail.","spec.1":"Innere Medizin","spec.2":"Pädiatrie","spec.3":"Chirurgie","spec.4":"Geburtshilfe & Gynäkologie","spec.5":"Notfallmedizin","spec.6":"Infektionskrankheiten","spec.7":"Gemeinschaftsgesundheit"},
+  sw:{"nav.rotations":"Kliniki","nav.safari":"Safari","nav.travel":"Usafiri wa Matibabu","nav.hiw":"Jinsi Inavyofanya Kazi","nav.login":"Ingia","nav.apply":"Omba","hero.eyebrow":"Tanzania · Afrika Mashariki · Vikundi 2026","hero.sub":"Mafunzo ya kliniki yanayosimamia Tanzania — pamoja na safari na usafiri wa matibabu kwenda India, Uturuki, Uingereza, Marekani na Kanada.","hero.apply":"Omba Nafasi","hero.schedule":"Simu Bure","hero.badge1":"Usimamizi wa Madaktari","hero.badge2":"Serengeti & Zanzibar","hero.badge3":"Cheti Kinaatolewa","clinical.title":"Dawa ya Kweli. Mfiduo Halisi.","clinical.body":"Uwekaji unaosimamia ndani ya hospitali za Tanzania.","clinical.note":"Miwekaji yote inasimamia na madaktari wa Tanzania wenye leseni.","dest.label":"Gundua Maeneo Yetu ya Uwekaji","dest.title":"Ulimwengu Tatu. Safari Moja.","test.title":"Sauti Kutoka Uwanjani","test.1":"Mfiduo wa kliniki wenye athari zaidi katika mafunzo yangu.","test.2":"Uliopangwa vizuri, salama na wa kitaalamu kutoka mwanzo hadi mwisho.","nl.title":"Endelea Kupata Habari za Vikundi 2026","nl.btn":"Jiandikishe","nl.note":"Hakuna barua taka.","nl.placeholder":"barua@pepe.com","nl.success":"🎉 Umejisajili! Karibu AfriMedTrip.","cta.title":"Anza Safari Yako.","cta.body":"Mafunzo ya kliniki, safari na usafiri wa matibabu — vyote vikikoordinatiwa na AfriMedTrip.","cta.apply":"Omba Sasa — 2026","cta.sub":"Amana ya $200 baada ya kuidhinishwa.","auth.title":"Karibu AfriMedTrip","auth.sub":"Ingia au fungua akaunti bure","auth.login":"Ingia","auth.signup":"Jisajili","auth.email":"Anwani ya Barua Pepe","auth.password":"Neno la Siri","auth.country":"Nchi","auth.firstName":"Jina la Kwanza","auth.lastName":"Jina la Mwisho","auth.loginBtn":"Ingia","auth.signupBtn":"Fungua Akaunti Bure","auth.noAccount":"Huna akaunti? Jisajili →","auth.terms":"Kwa kujisajili unakubali Masharti yetu.","auth.welcome":"Karibu tena!","auth.loggedIn":"Umeingia.","auth.created":"Akaunti Imefunguliwa!","auth.checkEmail":"Angalia barua pepe yako.","spec.1":"Dawa ya Ndani","spec.2":"Watoto","spec.3":"Upasuaji","spec.4":"Uzazi na Uzazi","spec.5":"Dawa ya Dharura","spec.6":"Magonjwa ya Kuambukizwa","spec.7":"Afya ya Jamii"},
+  ar:{"nav.rotations":"سريري","nav.safari":"سفاري","nav.travel":"السياحة العلاجية","nav.hiw":"كيف يعمل","nav.login":"تسجيل الدخول","nav.apply":"تقدّم","hero.eyebrow":"تنزانيا · شرق أفريقيا · دورات 2026","hero.sub":"تدريب سريري خاضع للإشراف في تنزانيا — مع رحلات سفاري وسياحة علاجية إلى الهند وتركيا وبريطانيا والولايات المتحدة وكندا.","hero.apply":"تقدّم للتدريب","hero.schedule":"مكالمة مجانية","hero.badge1":"إشراف طبي مرخص","hero.badge2":"سيرنجيتي وزنجبار","hero.badge3":"شهادة إتمام","clinical.title":"طب حقيقي. تعرّض فعلي.","clinical.body":"توظيف خاضع للإشراف في المستشفيات التنزانية النشطة.","clinical.note":"جميع التوظيفات تحت إشراف أطباء تنزانيين مرخصين.","dest.label":"اكتشف وجهات التدريب لدينا","dest.title":"ثلاثة عوالم. رحلة واحدة.","test.title":"أصوات من الميدان","test.1":"أكثر تجربة سريرية مؤثرة في مسيرتي التدريبية.","test.2":"منظم ومدعوم ومنهجي من البداية إلى النهاية.","nl.title":"ابقَ على اطلاع بدورات 2026","nl.btn":"اشترك","nl.note":"لا بريد مزعج. إلغاء الاشتراك في أي وقت.","nl.placeholder":"بريدك@الإلكتروني.com","nl.success":"🎉 تم الاشتراك! مرحباً بك.","cta.title":"ابدأ رحلتك.","cta.body":"تدريب سريري وسفاري وسياحة علاجية — كل ذلك بتنسيق AfriMedTrip.","cta.apply":"تقدّم الآن — 2026","cta.sub":"وديعة 200 دولار بعد الموافقة. التقديم مجاني.","auth.title":"مرحباً بك في AfriMedTrip","auth.sub":"سجّل دخولك أو أنشئ حساباً مجانياً","auth.login":"تسجيل الدخول","auth.signup":"إنشاء حساب","auth.email":"البريد الإلكتروني","auth.password":"كلمة المرور","auth.country":"البلد","auth.firstName":"الاسم الأول","auth.lastName":"اسم العائلة","auth.loginBtn":"تسجيل الدخول","auth.signupBtn":"إنشاء حساب مجاني","auth.noAccount":"لا تملك حساباً؟ سجّل →","auth.terms":"بالتسجيل توافق على شروطنا.","auth.welcome":"مرحباً بعودتك!","auth.loggedIn":"لقد سجّلت دخولك.","auth.created":"تم إنشاء الحساب!","auth.checkEmail":"تحقق من بريدك الإلكتروني.","spec.1":"الطب الداخلي","spec.2":"طب الأطفال","spec.3":"الجراحة","spec.4":"النساء والتوليد","spec.5":"طب الطوارئ","spec.6":"الأمراض المعدية","spec.7":"الصحة العامة"}
+};
+let lang = 'en';
+function t(k){ return (T[lang]&&T[lang][k]) || T.en[k] || k; }
+function applyTranslations(){
+  document.querySelectorAll('[data-i]').forEach(el=>{ const k=el.getAttribute('data-i'); el.innerHTML=t(k); });
+  document.querySelectorAll('[data-i-placeholder]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i-placeholder')); });
+}
+function setLang(l){
+  lang=l;
+  const flags={en:'🇬🇧',fr:'🇫🇷',es:'🇪🇸',de:'🇩🇪',sw:'🇹🇿',ar:'🇸🇦'};
+  const codes={en:'EN',fr:'FR',es:'ES',de:'DE',sw:'SW',ar:'AR'};
+  document.getElementById('langFlag').textContent=flags[l];
+  document.getElementById('langCode').textContent=codes[l];
+  document.getElementById('htmlRoot').dir=l==='ar'?'rtl':'ltr';
+  document.querySelectorAll('.lang-option').forEach(o=>{
+    const match={en:'English',fr:'Français',es:'Español',de:'Deutsch',sw:'Kiswahili',ar:'العربية'}[l];
+    o.classList.toggle('active',o.textContent.includes(match||''));
+  });
+  applyTranslations();
+  closeLang();
+}
+function toggleLang(){ document.getElementById('langDrop').classList.toggle('open'); }
+function closeLang(){ document.getElementById('langDrop').classList.remove('open'); }
+document.addEventListener('click',e=>{ if(!e.target.closest('#langWrap')) closeLang(); });
+
+/* ═══ AUTH ═══ */
+let currentUser = null;
+function switchTab(tab){
+  document.getElementById('loginPane').classList.toggle('hidden',tab!=='login');
+  document.getElementById('signupPane').classList.toggle('hidden',tab!=='signup');
+  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
+  document.getElementById('tabSignup').classList.toggle('active',tab==='signup');
+}
+function doLogin(){
+  const em=document.getElementById('liEmail').value.trim();
+  const pw=document.getElementById('liPass').value;
+  let ok=true;
+  document.getElementById('liEmailErr').classList.toggle('hidden',em.includes('@'));
+  document.getElementById('liPassErr').classList.toggle('hidden',pw.length>0);
+  if(!em.includes('@')||!pw){return;}
+  currentUser={name:em.split('@')[0],email:em};
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('loginSuccess').classList.remove('hidden');
+  updateUserUI();
+  setTimeout(()=>closeModal('authModal'),1800);
+}
+function doSignup(){
+  const f=document.getElementById('suFirst').value.trim();
+  const em=document.getElementById('suEmail').value.trim();
+  const pw=document.getElementById('suPass').value;
+  if(!f||!em.includes('@')||pw.length<8){alert('Please complete all fields. Password must be 8+ characters.');return;}
+  currentUser={name:f,email:em};
+  document.getElementById('signupForm').classList.add('hidden');
+  document.getElementById('signupSuccess').classList.remove('hidden');
+  updateUserUI();
+  setTimeout(()=>closeModal('authModal'),2000);
+}
+function updateUserUI(){
+  if(!currentUser)return;
+  document.getElementById('userAvatar').textContent=currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('userAvatar').style.display='flex';
+  document.getElementById('loginBtn').style.display='none';
+}
+function userMenuToggle(){
+  if(confirm(`Logged in as ${currentUser?.email}\n\nClick OK to log out.`)){
+    currentUser=null;
+    document.getElementById('userAvatar').style.display='none';
+    document.getElementById('loginBtn').style.display='';
+  }
+}
+
+/* ═══ MODALS ═══ */
+function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+function closeModalOutside(e,id){ if(e.target.id===id) closeModal(id); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal('authModal');closeLightbox();}});
+
+/* ═══ LIGHTBOX ═══ */
+function openLightbox(emoji,caption){
+  document.getElementById('lbEmoji').textContent=emoji;
+  document.getElementById('lbCaption').textContent=caption;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ═══ NEWSLETTER ═══ */
+function subscribeNL(){
+  const em=document.getElementById('nlEmail').value.trim();
+  if(!em.includes('@')){ document.getElementById('nlEmail').style.outline='2px solid #C62828'; return; }
+  document.getElementById('nlEmail').style.outline='';
+  document.getElementById('nlFormWrap').style.display='none';
+  const s=document.getElementById('nlSuccess'); s.classList.remove('hidden'); s.textContent=t('nl.success');
+}
+
+/* ═══ NAVBAR ═══ */
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{ nav.classList.toggle('scrolled',scrollY>40); });
+function toggleMobile(){ const m=document.getElementById('mobMenu'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
+
+/* ═══ SCROLL REVEAL ═══ */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('revealed');obs.unobserve(e.target);} });
+},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
